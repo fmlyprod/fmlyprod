@@ -886,36 +886,7 @@ renderHomeGrid();
 populateLoginProjects();
 populateFilterDropdowns();
 
-// ── LOGO ──
-// Loads Google Font for cursive fallback, then applies logo everywhere.
-// Replace LOGO_SRC with your actual hosted PNG/SVG URL when deploying to Webflow.
-(function(){
-  // Load Dancing Script from Google Fonts for the nav logo
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = 'https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap';
-  document.head.appendChild(link);
-
-  // Build a crisp SVG wordmark that closely matches the uploaded script logo
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 130">
-    <defs>
-      <style>@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700');</style>
-    </defs>
-    <text x="8" y="108"
-      font-family="'Dancing Script', cursive"
-      font-size="108"
-      font-weight="700"
-      fill="#f2ede4"
-      opacity="0.9">Family</text>
-  </svg>`;
-  const dataUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
-  document.querySelectorAll('#site-logo, #gnb-logo-img').forEach(img => {
-    img.src = dataUrl;
-    img.style.height = '40px';
-    img.style.filter = 'none';
-    img.style.opacity = '1';
-  });
-})();
+document.querySelectorAll('#site-logo,#gnb-logo-img').forEach(i=>{i.src='logo.png';i.style.height='40px';i.style.filter='brightness(0) invert(1)';});
 </script>
 </body>
 </html>
