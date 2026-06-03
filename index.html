@@ -288,18 +288,112 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
 #vlb-wrap{width:90vw;max-width:1200px;aspect-ratio:16/9;background:#000;}
 #vlb-video{width:100%;height:100%;object-fit:contain;}
 #vlb-label{margin-top:16px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.15em;color:var(--text);}
+@media(max-width:768px){
+  #nav-hamburger{display:flex!important;}
+  #nav-links-list{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;gap:36px;z-index:300;}
+  #nav-links-list.open{display:flex!important;}
+  #nav-links-list a{font-size:14px!important;letter-spacing:.25em;}
+  #nav-links-list .nav-close{position:absolute;top:24px;right:24px;background:none;border:none;color:var(--text);font-size:24px;cursor:pointer;}
+}
+/* ── MOBILE ── */
+@media(max-width:768px){
+  /* NAV */
+  nav#site-nav{padding:14px 20px;}
+  .nav-logo img{height:28px;}
+  .nav-links{gap:18px;}
+  .nav-links a{font-size:9px;letter-spacing:.12em;}
+  #nav-backend{display:none;}
+
+  /* HERO */
+  .hero-content img{height:clamp(50px,18vw,90px)!important;}
+  .hero-tagline{font-size:9px;letter-spacing:.15em;padding:0 20px;}
+  .hero-scroll{display:none;}
+
+  /* WORKS GRID */
+  .works-grid{grid-template-columns:1fr!important;}
+  .work-item{aspect-ratio:16/10;border-right:none!important;}
+  .w-splash-logo{font-size:clamp(22px,7vw,38px);}
+  .w-splash-play{width:40px;height:40px;}
+
+  /* HOME SECTION HEADERS */
+  .section-head{padding:40px 20px 16px!important;}
+  .section-head-title{font-size:clamp(32px,8vw,56px)!important;}
+
+  /* STILLS */
+  #stills-container > div{padding:40px 20px 0!important;flex-direction:column!important;gap:8px;}
+  #stills-container .grid-wrap{padding:16px 20px 0!important;}
+
+  /* ABOUT */
+  .about-hero{grid-template-columns:1fr!important;grid-template-rows:300px auto;}
+  .about-text{padding:32px 20px!important;}
+  .about-text h2{font-size:clamp(28px,8vw,48px)!important;}
+
+  /* CONTACT */
+  .contact-big-title{font-size:clamp(40px,12vw,80px)!important;padding:0 20px;}
+  .contact-grid{grid-template-columns:1fr!important;padding:0 20px!important;gap:24px!important;}
+
+  /* FOOTER */
+  footer{flex-direction:column!important;gap:16px!important;padding:32px 20px!important;text-align:center;}
+  .foot-links{justify-content:center!important;}
+
+  /* VIDEO LIGHTBOX */
+  #vlb-wrap{width:96vw;max-width:100%;}
+  #vlb-label{font-size:14px;}
+  #vlb-close{top:12px;right:12px;width:36px;height:36px;font-size:16px;}
+
+  /* GALLERY NAV */
+  #gallery-nav-bar{padding:0 16px;}
+  .gnb-logo img{height:24px;}
+
+  /* GALLERY CLIENT VIEW */
+  .gallery-header{padding:60px 20px 28px!important;}
+  .gallery-nav{padding:0 20px!important;}
+  .gallery-actions{padding:14px 20px!important;}
+  .gallery-body{padding:20px 20px 60px!important;}
+  .photo-grid{grid-template-columns:repeat(2,1fr)!important;}
+
+  /* SCENE CARDS */
+  .scenes-grid{grid-template-columns:1fr!important;}
+
+  /* BACKEND / ADMIN */
+  .be-topbar{padding:0 16px!important;flex-wrap:wrap;gap:8px;height:auto!important;padding-top:10px!important;padding-bottom:10px!important;}
+  .be-tabs{gap:4px!important;}
+  .be-grid-2{grid-template-columns:1fr!important;}
+  .admin-topbar{flex-wrap:wrap;gap:8px;padding:12px 16px!important;height:auto!important;}
+  .admin-tabs{gap:4px!important;}
+  .g-table{font-size:10px;}
+
+  /* STILLS GRID OVERRIDES */
+  div[style*="grid-template-columns: 2fr 1fr"],
+  div[style*="grid-template-columns: 1fr 1fr"],
+  div[style*="grid-template-columns: 2fr 1fr 1fr"],
+  div[style*="grid-template-columns: 1fr 2fr"]{
+    grid-template-columns:1fr!important;
+  }
+}
+@media(max-width:480px){
+  .nav-links{gap:12px;}
+  .nav-links a{font-size:8px;letter-spacing:.08em;}
+  nav#site-nav{padding:12px 16px;}
+}
 </style>
 </head>
 <body>
 
 <nav id="site-nav">
   <a class="nav-logo" onclick="showPage('home')"><img id="site-logo" alt="Family" style="height:40px;width:auto;"></a>
-  <ul class="nav-links">
+  <button id="nav-hamburger" onclick="toggleMobileNav()" style="display:none;background:none;border:none;cursor:pointer;padding:4px;flex-direction:column;gap:5px;">
+    <span style="display:block;width:22px;height:1px;background:var(--text);"></span>
+    <span style="display:block;width:22px;height:1px;background:var(--text);"></span>
+    <span style="display:block;width:22px;height:1px;background:var(--text);"></span>
+  </button>
+  <ul class="nav-links" id="nav-links-list">
     <li><a onclick="showPage('work')" id="nav-work">Work</a></li>
     <li><a onclick="showPage('about')" id="nav-about">About</a></li>
     <li><a onclick="showPage('contact')" id="nav-contact">Contact</a></li>
     <li><a onclick="showPage('gallery')" id="nav-gallery">Access</a></li>
     <li><a onclick="showPage('backend')" id="nav-backend" style="color:var(--dim);">⚙</a></li>
+    <li><button class="nav-close" onclick="closeMobileNav()">✕</button></li>
   </ul>
 </nav>
 
@@ -470,11 +564,13 @@ document.getElementById('about-photo').src='https://github.com/fmlyprod/fmlyprod
 // Replace above line with your actual photo URL once uploaded to GitHub
 
 // VIDEO LIGHTBOX
-function openVLB(url,label){const v=document.getElementById('vlb-video');v.src=url;v.play().catch(()=>{});document.getElementById('vlb-label').textContent=label;document.getElementById('vlb').classList.add('show');}
+function openVLB(url,label){const v=document.getElementById('vlb-video');v.src=url;v.muted=false;v.volume=1;document.getElementById('vlb-label').textContent=label;document.getElementById('vlb').classList.add('show');v.play().catch(()=>{v.muted=false;});}
 function closeVLB(){const v=document.getElementById('vlb-video');v.pause();v.src='';document.getElementById('vlb').classList.remove('show');}
 document.getElementById('vlb').addEventListener('click',function(e){if(e.target===this||e.target===document.getElementById('vlb-wrap'))closeVLB();});
 
-function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');const ne=document.getElementById('nav-'+id);if(ne)ne.classList.add('active');window.scrollTo(0,0);const isG=id==='gallery';document.getElementById('site-nav').style.display=isG?'none':'flex';document.getElementById('gallery-nav-bar').classList.toggle('active',isG);if(id==='film')renderFilmGrid();if(id==='stills')renderStillsPage();if(id==='home')renderHomeGrid();if(id==='backend')renderBeFilmTable();}
+function toggleMobileNav(){document.getElementById('nav-links-list').classList.toggle('open');}
+function closeMobileNav(){document.getElementById('nav-links-list').classList.remove('open');}
+function showPage(id){closeMobileNav();document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');const ne=document.getElementById('nav-'+id);if(ne)ne.classList.add('active');window.scrollTo(0,0);const isG=id==='gallery';document.getElementById('site-nav').style.display=isG?'none':'flex';document.getElementById('gallery-nav-bar').classList.toggle('active',isG);if(id==='film')renderFilmGrid();if(id==='stills')renderStillsPage();if(id==='home')renderHomeGrid();if(id==='backend')renderBeFilmTable();}
 
 function makeFilmItem(p,idx){
   const d=document.createElement('div');
