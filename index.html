@@ -19,8 +19,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:cen
 .page{display:none;min-height:100vh;}
 .page.active{display:block;}
 .hero{height:100vh;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.22;}
-.hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 20%,rgba(8,8,8,.75) 100%);}
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.22;pointer-events:none;}
+.hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 20%,rgba(8,8,8,.75) 100%);pointer-events:none;}
 .hero-content{position:relative;z-index:2;text-align:center;padding:0 24px;}
 .hero-pre{font-size:10px;letter-spacing:.35em;color:var(--muted);text-transform:uppercase;margin-bottom:20px;}
 .hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(100px,16vw,180px);letter-spacing:.06em;line-height:.85;color:var(--text);}
@@ -420,7 +420,7 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
     <div class="hero-content">
 
       <div style="display:flex;flex-direction:column;align-items:center;text-align:center;">
-        <img src="https://github.com/fmlyprod/fmlyprod/blob/main/logo.png?raw=true" alt="FMLY Prod." style="height:clamp(80px,14vw,160px);width:auto;display:block;margin-bottom:20px;">
+        <img src="https://raw.githubusercontent.com/fmlyprod/fmlyprod/main/logo.png" alt="FMLY Prod." style="height:clamp(80px,14vw,160px);width:auto;display:block;margin-bottom:20px;">
         <div style="font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);">Boutique Production Company</div>
       </div>
       <p class="hero-tagline">No matter the size, scope, or style — we produce it</p>
@@ -607,8 +607,8 @@ const photoDB={locations:[{id:'l1',url:'https://images.unsplash.com/photo-155568
 let currentUser=null,loginTab='admin',likesFilter='all',activeProjectId='p1',selectedFile=null,parsedScenes=[],sceneSelections={};
 
 // LOGO
-document.querySelectorAll('#site-logo,#gnb-logo-img').forEach(i=>{i.src='https://github.com/fmlyprod/fmlyprod/blob/main/logo.png?raw=true';i.style.height='40px';i.style.width='auto';});
-document.getElementById('about-photo').src='https://github.com/fmlyprod/fmlyprod/blob/main/about.jpg?raw=true';
+document.querySelectorAll('#site-logo,#gnb-logo-img').forEach(i=>{i.src='https://raw.githubusercontent.com/fmlyprod/fmlyprod/main/logo.png';i.style.height='40px';i.style.width='auto';});
+document.getElementById('about-photo').src='https://raw.githubusercontent.com/fmlyprod/fmlyprod/main/about.jpg';
 // Replace above line with your actual photo URL once uploaded to GitHub
 
 // VIDEO LIGHTBOX
