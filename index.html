@@ -516,7 +516,7 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
 <div class="page" id="page-backend">
   <div id="be-login-screen"><div class="be-login"><div class="be-login-box"><h2>CONTENT MANAGER</h2><p>Admin access only</p><div class="be-field"><label>Password</label><input type="password" id="be-pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')beLogin()"></div><div class="be-error" id="be-error">Incorrect password.</div><button class="be-btn be-btn-solid" style="width:100%;justify-content:center;margin-top:4px;" onclick="beLogin()">Sign In</button><div style="margin-top:14px;font-size:9px;color:var(--dim);letter-spacing:.1em;text-align:center;">Password: admin123</div></div></div></div>
   <div id="be-shell" class="be-shell">
-    <div class="be-topbar"><div style="display:flex;align-items:center;gap:24px;"><div class="be-topbar-logo">FMLY — Content Manager</div><button onclick="beLogout();showPage('home')" style="background:none;border:none;color:var(--dim);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;">← Back to Site</button></div><div class="be-tabs"><button class="be-tab active" onclick="showBePane('film',this)">Film Projects</button><button class="be-tab" onclick="showBePane('stills',this)">Stills Projects</button></div><button class="be-logout" onclick="beLogout()">Sign Out</button></div>
+    <div class="be-topbar"><div style="display:flex;align-items:center;gap:24px;"><div class="be-topbar-logo">FMLY — Content Manager</div><button onclick="beLogout();showPage('home')" style="background:none;border:none;color:var(--dim);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;">← Back to Site</button></div><div class="be-tabs"><button class="be-tab active" onclick="showBePane('film',this)">Film Projects</button><button class="be-tab" onclick="showBePane('stills',this)">Stills Projects</button><button class="be-tab" onclick="showBePane('analyzer',this)" style="color:var(--accent);">✦ Storyboard AI</button></div><button class="be-logout" onclick="beLogout()">Sign Out</button></div>
     <div class="be-content">
       <div class="be-pane active" id="be-pane-film">
         <div class="be-pane-title">Film Projects</div>
@@ -529,6 +529,46 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
         <div class="be-form-card"><h3>Add New Stills Project</h3><div class="be-grid-2"><div class="be-field"><label>Client Name</label><input type="text" id="s-client" placeholder="e.g. Nike"></div><div class="be-field"><label>Project Title</label><input type="text" id="s-title" placeholder="e.g. Just Do It Campaign"></div></div><div class="be-field"><label>Description</label><textarea id="s-desc" placeholder="Short description…"></textarea></div><div class="be-field"><label>Hero Image URL</label><input type="text" id="s-hero" placeholder="https://…"></div><div class="be-field"><label>Additional Image URLs (one per line)</label><textarea id="s-imgs" placeholder="https://image1.jpg&#10;https://image2.jpg" style="height:90px;"></textarea></div><div style="margin-top:8px;display:flex;gap:10px;align-items:center;"><button class="be-btn be-btn-accent" onclick="addStillsProject()">+ Add Project</button><div id="s-msg" style="font-size:10px;color:#7ecf82;letter-spacing:.1em;display:none;">✓ Added!</div></div></div>
         <div class="be-pane-title" style="font-size:18px;margin-top:8px;">All Stills Projects</div>
         <table class="be-table"><thead><tr><th>Hero</th><th>Client</th><th>Project</th><th>Images</th><th>Order</th><th></th></tr></thead><tbody id="stills-table-body"></tbody></table>
+      </div>
+
+      <div class="be-pane" id="be-pane-analyzer" style="padding:0;">
+        <div class="be-pane-title">Storyboard AI Analyzer</div>
+        <div style="display:grid;grid-template-columns:300px 1fr;gap:32px;min-height:60vh;">
+          <div style="display:flex;flex-direction:column;gap:18px;">
+            <div>
+              <div style="font-size:9px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">01 — Upload Storyboard</div>
+              <div style="border:1px dashed rgba(255,255,255,0.15);border-radius:4px;padding:24px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;position:relative;cursor:pointer;" ondragover="event.preventDefault()" ondrop="azHandleDrop(event)">
+                <input type="file" id="az-file-input" accept=".pdf,image/*" onchange="azHandleFile(this.files[0])" style="position:absolute;inset:0;opacity:0;cursor:pointer;">
+                <div style="font-size:24px;opacity:0.4;">⬆</div>
+                <div style="font-size:10px;color:var(--muted);line-height:1.5;"><strong style="color:var(--text);display:block;margin-bottom:3px;">Drop Storyboard Here</strong>PDF or Image</div>
+              </div>
+              <div id="az-file-chosen" style="display:none;margin-top:8px;padding:8px 12px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;align-items:center;gap:10px;">
+                <span>📄</span>
+                <div style="flex:1;min-width:0;"><div style="font-size:10px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="az-fname"></div><div style="font-size:9px;color:var(--muted);" id="az-fsize"></div></div>
+                <button onclick="azReset()" style="background:none;border:none;color:var(--muted);cursor:pointer;flex-shrink:0;">✕</button>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:9px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">02 — Region</div>
+              <select id="az-region" style="width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:9px 10px;font-family:'DM Mono',monospace;font-size:10px;outline:none;border-radius:4px;"><option value="">All Regions</option><option value="CATALUNYA">Catalunya</option><option value="MADRID">Madrid</option><option value="ANDALUCIA">Andalucía</option><option value="ARAGON">Aragón</option><option value="ASTURIAS">Asturias</option><option value="BALEARES">Baleares</option><option value="CANARY ISLANDS">Canary Islands</option><option value="CANTABRIA">Cantabria</option><option value="CASTILLAS">Castillas</option><option value="ANDORRA">Andorra</option></select>
+            </div>
+            <div>
+              <div style="font-size:9px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">03 — Photo Types</div>
+              <select id="az-types" style="width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:9px 10px;font-family:'DM Mono',monospace;font-size:10px;outline:none;border-radius:4px;"><option value="both">Locations + Cast</option><option value="locations">Locations Only</option><option value="cast">Cast Only</option></select>
+            </div>
+            <div>
+              <div style="font-size:9px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">04 — Notes</div>
+              <input type="text" id="az-notes" placeholder="e.g. luxury, summer, coastal" style="width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:9px 10px;font-family:'DM Mono',monospace;font-size:10px;outline:none;border-radius:4px;">
+            </div>
+            <button id="az-btn" onclick="azAnalyze()" disabled style="background:var(--accent);color:#000;border:none;border-radius:4px;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:.2em;padding:13px;cursor:pointer;width:100%;opacity:0.35;transition:opacity .2s;">✦ Analyze Storyboard</button>
+            <div id="az-status" style="font-size:9px;color:var(--muted);text-align:center;letter-spacing:.1em;min-height:14px;"></div>
+          </div>
+          <div>
+            <div id="az-empty" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:360px;gap:14px;opacity:0.28;text-align:center;"><div style="font-size:44px;">🎬</div><div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.15em;">Ready to Scout</div><div style="font-size:10px;color:var(--muted);line-height:1.8;">Upload a storyboard, pick your<br>region and types, then analyze.</div></div>
+            <div id="az-loading" style="display:none;flex-direction:column;align-items:center;justify-content:center;height:360px;gap:18px;text-align:center;"><div style="width:36px;height:36px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .9s linear infinite;"></div><div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.2em;color:var(--accent);">Analyzing</div><div id="az-loading-status" style="font-size:10px;color:var(--muted);letter-spacing:.1em;"></div></div>
+            <div id="az-scenes" style="display:none;"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -742,6 +782,97 @@ function closeModal(id){document.getElementById(id).classList.remove('show');}
 document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show');}));
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 renderHomeGrid();populateLoginProjects();populateFilterDropdowns();
+
+// ── STANDALONE STORYBOARD ANALYZER ──
+let azFile=null,azBase64=null;
+function azHandleFile(file){
+  if(!file)return;azFile=file;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    azBase64=ev.target.result.split(',')[1];
+    document.getElementById('az-fname').textContent=file.name;
+    document.getElementById('az-fsize').textContent=(file.size/1024/1024).toFixed(2)+' MB';
+    document.getElementById('az-file-chosen').style.display='flex';
+    const btn=document.getElementById('az-btn');btn.disabled=false;btn.style.opacity='1';
+  };
+  reader.readAsDataURL(file);
+}
+function azHandleDrop(e){e.preventDefault();const f=e.dataTransfer.files[0];if(f)azHandleFile(f);}
+function azReset(){
+  azFile=null;azBase64=null;
+  document.getElementById('az-file-chosen').style.display='none';
+  document.getElementById('az-file-input').value='';
+  const btn=document.getElementById('az-btn');btn.disabled=true;btn.style.opacity='0.35';
+  document.getElementById('az-status').textContent='';
+  document.getElementById('az-empty').style.display='flex';
+  document.getElementById('az-loading').style.display='none';
+  document.getElementById('az-scenes').style.display='none';
+}
+async function azAnalyze(){
+  if(!azFile||!azBase64)return;
+  const btn=document.getElementById('az-btn');
+  btn.disabled=true;btn.textContent='Analyzing...';
+  const region=document.getElementById('az-region').value;
+  const types=document.getElementById('az-types').value;
+  const notes=document.getElementById('az-notes').value;
+  const wantLoc=types!=='cast',wantCast=types!=='locations';
+  const setS=s=>{document.getElementById('az-status').textContent=s;document.getElementById('az-loading-status').textContent=s;};
+  document.getElementById('az-empty').style.display='none';
+  document.getElementById('az-loading').style.display='flex';
+  document.getElementById('az-scenes').style.display='none';
+  try{
+    setS('Reading storyboard...');
+    const isImg=azFile.type.startsWith('image/');
+    const cb=isImg?{type:'image',source:{type:'base64',media_type:azFile.type,data:azBase64}}:{type:'document',source:{type:'base64',media_type:'application/pdf',data:azBase64}};
+    const prompt='Analyze this storyboard.'+(notes?' Notes: '+notes+'.':'')+' Region: '+(region||'Spain')+'. Extract every scene. Return ONLY a JSON array: [{"number":"01","name":"SCENE NAME UPPERCASE","description":"2-3 sentence visual description","locationType":"specific location type","castType":"cast description or null","mood":"mood keywords","needsLocation":true,"needsCast":true,"locationSearchTerms":["term1","term2"],"castSearchTerms":["term1"]}]. No markdown.';
+    const txt=await callAI([{role:'user',content:[cb,{type:'text',text:prompt}]}]);
+    const m=txt.match(/\[[\s\S]*\]/);
+    if(!m)throw new Error('Could not parse scenes');
+    const scenes=JSON.parse(m[0]);
+    setS('Found '+scenes.length+' scenes - scouting Drive...');
+    const regionId=REGION_IDS[region];
+    const castCityId=region==='CATALUNYA'?CAST_CITY_IDS['BARCELONA']:region==='MADRID'?CAST_CITY_IDS['MADRID']:CAST_FOLDER_ID;
+    const dedup=arr=>{const s=new Set();return arr.filter(p=>{if(s.has(p.id))return false;s.add(p.id);return true;});};
+    const swp=await Promise.all(scenes.map(async(scene,i)=>{
+      setS('Scouting '+scene.name+' ('+( i+1)+'/'+scenes.length+')...');
+      const lp=[],cp=[];
+      if(wantLoc&&scene.needsLocation){for(const t of(scene.locationSearchTerms||[scene.locationType||'location']).slice(0,2)){const p=await searchDriveForPhotos(t,regionId||MYLIO_ID);lp.push(...p);if(lp.length>=6)break;}}
+      if(wantCast&&scene.needsCast&&scene.castType){for(const t of(scene.castSearchTerms||[scene.castType]).slice(0,2)){const p=await searchDriveForPhotos(t,castCityId);cp.push(...p);if(cp.length>=6)break;}}
+      return{...scene,locPhotos:dedup(lp).slice(0,8),castPhotos:dedup(cp).slice(0,8)};
+    }));
+    document.getElementById('az-loading').style.display='none';
+    document.getElementById('az-scenes').style.display='block';
+    azRenderScenes(swp,wantLoc,wantCast);
+    setS('Done - '+scenes.length+' scenes ready');
+    btn.textContent='✦ Analyze Storyboard';btn.disabled=false;btn.style.opacity='1';
+  }catch(e){
+    document.getElementById('az-loading').style.display='none';
+    document.getElementById('az-empty').style.display='flex';
+    setS('Error: '+e.message);
+    btn.textContent='✦ Analyze Storyboard';btn.disabled=false;btn.style.opacity='1';
+  }
+}
+function azRenderScenes(scenes,wantLoc,wantCast){
+  const c=document.getElementById('az-scenes');
+  c.innerHTML='<div style="font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-bottom:20px;">'+scenes.length+' scenes extracted</div>';
+  scenes.forEach((scene,si)=>{
+    const card=document.createElement('div');
+    card.style.cssText='border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:20px;';
+    let ph='';
+    if(wantLoc&&scene.needsLocation){
+      const photos=scene.locPhotos||[];
+      const g=photos.length?photos.map(p=>'<img src="'+p.url+'" title="'+p.name+'" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:2px;" onerror="this.style.display=\'none\'">').join(''):'<div style="grid-column:1/-1;padding:14px;text-align:center;font-size:10px;color:var(--muted);border:1px dashed var(--border);border-radius:4px;">No locations found for &ldquo;'+scene.locationType+'&rdquo;</div>';
+      ph+='<div style="padding:10px 14px 4px;font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;">📍 Locations</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px;padding:6px 14px;">'+g+'</div>';
+    }
+    if(wantCast&&scene.needsCast){
+      const photos=scene.castPhotos||[];
+      const g=photos.length?photos.map(p=>'<img src="'+p.url+'" title="'+p.name+'" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:2px;" onerror="this.style.display=\'none\'">').join(''):'<div style="grid-column:1/-1;padding:14px;text-align:center;font-size:10px;color:var(--muted);border:1px dashed var(--border);border-radius:4px;">No cast found for &ldquo;'+(scene.castType||'this scene')+'&rdquo;</div>';
+      ph+='<div style="padding:10px 14px 4px;font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;">👤 Cast</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px;padding:6px 14px;">'+g+'</div>';
+    }
+    card.innerHTML='<div style="padding:12px 14px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px;"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:26px;color:var(--accent);min-width:34px;">'+(String(si+1).padStart(2,'0'))+'</div><div><div style="font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;">'+scene.name+'</div><div style="font-size:10px;color:var(--muted);margin-top:3px;line-height:1.6;">'+scene.description+'</div></div></div>'+ph+'<div style="height:6px;"></div>';
+    c.appendChild(card);
+  });
+}
 </script>
 </body>
 </html>
