@@ -123,9 +123,8 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
 .be-btn-red{border-color:rgba(193,59,42,.35);color:#f08080;}
 .be-btn-red:hover{background:rgba(193,59,42,.12);}
 .be-shell{display:none;padding-top:64px;}
-.be-topbar{position:fixed;top:0;left:0;right:0;z-index:201;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;pointer-events:none;visibility:hidden;}
-.be-shell{display:none;padding-top:64px;}
-.be-shell[style*="block"] .be-topbar,.be-shell[style*="block"]>.be-topbar{pointer-events:auto;visibility:visible;}
+.be-topbar{position:sticky;top:0;left:0;right:0;z-index:201;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;}
+.be-shell{display:none;}
 .be-topbar-logo{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.25em;color:var(--text);}
 .be-tabs{display:flex;}
 .be-tab{padding:8px 20px;font-size:9px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all .15s;background:none;border-left:none;border-right:none;border-top:none;font-family:'DM Mono',monospace;}
