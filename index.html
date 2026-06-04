@@ -420,7 +420,7 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
     <div class="hero-content">
 
       <div style="display:flex;flex-direction:column;align-items:center;text-align:center;">
-        <img src="https://raw.githubusercontent.com/fmlyprod/fmlyprod/main/logo.png" alt="FMLY Prod." style="height:clamp(80px,14vw,160px);width:auto;display:block;margin-bottom:20px;">
+        <img src="/logo.png" alt="FMLY Prod." style="height:clamp(80px,14vw,160px);width:auto;display:block;margin-bottom:20px;">
         <div style="font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);">Boutique Production Company</div>
       </div>
       <p class="hero-tagline">No matter the size, scope, or style — we produce it</p>
@@ -607,8 +607,8 @@ const photoDB={locations:[{id:'l1',url:'https://images.unsplash.com/photo-155568
 let currentUser=null,loginTab='admin',likesFilter='all',activeProjectId='p1',selectedFile=null,parsedScenes=[],sceneSelections={};
 
 // LOGO
-document.querySelectorAll('#site-logo,#gnb-logo-img').forEach(i=>{i.src='https://raw.githubusercontent.com/fmlyprod/fmlyprod/main/logo.png';i.style.height='40px';i.style.width='auto';});
-const ap=document.getElementById('about-photo');if(ap)ap.src='https://raw.githubusercontent.com/fmlyprod/fmlyprod/main/about.jpg';
+document.querySelectorAll('#site-logo,#gnb-logo-img').forEach(i=>{i.src='/logo.png';i.style.height='40px';i.style.width='auto';});
+const ap=document.getElementById('about-photo');if(ap)ap.src='/about.jpg';
 // Replace above line with your actual photo URL once uploaded to GitHub
 
 // VIDEO LIGHTBOX
