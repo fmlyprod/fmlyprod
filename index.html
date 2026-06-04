@@ -540,7 +540,12 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
   <div id="g-admin-shell" style="display:none;">
     <div class="admin-topbar"><div class="shell-logo" style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.22em;color:var(--text);">FMLY — References Admin</div><div class="admin-tabs"><button class="admin-tab active" onclick="showAdminPane('projects',this)">Projects</button><button class="admin-tab" onclick="showAdminPane('accounts',this)">Accounts</button><button class="admin-tab" onclick="showAdminPane('likes',this)">Likes Log</button></div><button class="admin-logout" onclick="galleryLogout()">Sign Out</button></div>
     <div class="admin-shell-bg"><div class="admin-content">
-      <div class="admin-pane active" id="pane-projects"><div class="pane-title">Projects</div><div class="project-grid" id="project-grid"></div><hr class="divider-line"><div id="upload-section" style="display:none;"><div class="active-proj-bar"><div><div class="apb-label">Active Project</div><div class="apb-name" id="active-project-label">—</div></div><div style="display:flex;gap:10px;"><button class="gbtn gbtn-sm" onclick="openModal('modal-manage-accounts')">Manage Accounts</button><button class="gbtn gbtn-accent gbtn-sm" onclick="publishGallery()">↑ Publish Gallery</button></div></div><div style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Upload Storyboard</div><div class="upload-zone" id="upload-zone"><input type="file" id="file-input" accept=".pdf,image/*" onchange="handleFile(this)"><div style="font-size:24px;margin-bottom:10px;">📋</div><strong>Drop Storyboard Here</strong><p>PDF or image · max 20MB</p></div><div id="file-chosen" style="display:none;padding:12px 16px;background:rgba(255,255,255,.02);border:1px solid var(--border);margin-top:10px;align-items:center;gap:12px;"><span style="font-size:20px;">📄</span><div><div style="font-size:12px;color:var(--text);" id="fname"></div><div style="font-size:10px;color:var(--muted);" id="fsize"></div></div></div><div style="margin-top:14px;display:flex;gap:12px;align-items:center;"><button class="gbtn gbtn-accent" id="analyze-btn" onclick="analyzeStoryboard()" disabled>✦ Analyze with AI</button><div id="analyze-status" style="font-size:10px;color:var(--muted);display:flex;align-items:center;gap:8px;"></div></div><div id="error-msg" style="display:none;background:rgba(193,59,42,.08);border:1px solid rgba(193,59,42,.2);color:#f08080;padding:12px;font-size:11px;margin-top:12px;"></div><div id="scenes-section" style="display:none;margin-top:24px;"><div style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">Select Photos per Scene</div><div class="scenes-grid" id="scenes-grid"></div></div></div></div>
+      <div class="admin-pane active" id="pane-projects"><div class="pane-title">Projects</div><div class="project-grid" id="project-grid"></div><hr class="divider-line"><div id="upload-section" style="display:none;"><div class="active-proj-bar"><div><div class="apb-label">Active Project</div><div class="apb-name" id="active-project-label">—</div></div><div style="display:flex;gap:10px;"><button class="gbtn gbtn-sm" onclick="openModal('modal-manage-accounts')">Manage Accounts</button><button class="gbtn gbtn-accent gbtn-sm" onclick="publishGallery()">↑ Publish Gallery</button></div></div><div style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Upload Storyboard</div><div class="upload-zone" id="upload-zone"><input type="file" id="file-input" accept=".pdf,image/*" onchange="handleFile(this)"><div style="font-size:24px;margin-bottom:10px;">📋</div><strong>Drop Storyboard Here</strong><p>PDF or image · max 20MB</p></div><div id="file-chosen" style="display:none;padding:12px 16px;background:rgba(255,255,255,.02);border:1px solid var(--border);margin-top:10px;align-items:center;gap:12px;"><span style="font-size:20px;">📄</span><div><div style="font-size:12px;color:var(--text);" id="fname"></div><div style="font-size:10px;color:var(--muted);" id="fsize"></div></div></div><div style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+  <div><label style="font-size:9px;color:var(--dim);letter-spacing:.16em;text-transform:uppercase;display:block;margin-bottom:6px;">Region</label><select id="sb-region" style="width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-family:'DM Mono',monospace;font-size:10px;outline:none;"><option value="">All Regions</option><option value="CATALUNYA">Catalunya</option><option value="MADRID">Madrid</option><option value="ANDALUCIA">Andalucía</option><option value="ARAGON">Aragón</option><option value="ASTURIAS">Asturias</option><option value="BALEARES">Baleares</option><option value="CANARY ISLANDS">Canary Islands</option><option value="CANTABRIA">Cantabria</option><option value="CASTILLAS">Castillas</option><option value="ANDORRA">Andorra</option></select></div>
+  <div><label style="font-size:9px;color:var(--dim);letter-spacing:.16em;text-transform:uppercase;display:block;margin-bottom:6px;">Photo Types</label><select id="sb-types" style="width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-family:'DM Mono',monospace;font-size:10px;outline:none;"><option value="both">Locations + Cast</option><option value="locations">Locations Only</option><option value="cast">Cast Only</option></select></div>
+</div>
+<div style="margin-top:10px;"><label style="font-size:9px;color:var(--dim);letter-spacing:.16em;text-transform:uppercase;display:block;margin-bottom:6px;">Production Notes (optional)</label><input type="text" id="sb-notes" placeholder="e.g. luxury tone, summer, coastal" style="width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-family:'DM Mono',monospace;font-size:10px;outline:none;"></div>
+<div style="margin-top:14px;display:flex;gap:12px;align-items:center;"><button class="gbtn gbtn-accent" id="analyze-btn" onclick="analyzeStoryboard()" disabled>✦ Analyze with AI</button><div id="analyze-status" style="font-size:10px;color:var(--muted);display:flex;align-items:center;gap:8px;"></div></div><div id="error-msg" style="display:none;background:rgba(193,59,42,.08);border:1px solid rgba(193,59,42,.2);color:#f08080;padding:12px;font-size:11px;margin-top:12px;"></div><div id="scenes-section" style="display:none;margin-top:24px;"><div style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">Select Photos per Scene</div><div class="scenes-grid" id="scenes-grid"></div></div></div></div>
       <div class="admin-pane" id="pane-accounts"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;"><div class="pane-title" style="margin-bottom:0;">Accounts</div><button class="gbtn gbtn-sm" onclick="openModal('modal-new-account')">+ New Account</button></div><div style="margin-bottom:14px;"><label style="font-size:9px;color:var(--dim);letter-spacing:.16em;text-transform:uppercase;display:block;margin-bottom:8px;">Filter by Project</label><select id="accounts-project-filter" onchange="renderAccountsTable()" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px 12px;font-family:'DM Mono',monospace;font-size:11px;outline:none;cursor:pointer;"><option value="all">All Projects</option></select></div><table class="g-table"><thead><tr><th>Name</th><th>Email</th><th>Project</th><th>Likes</th><th></th></tr></thead><tbody id="accounts-tbody"></tbody></table></div>
       <div class="admin-pane" id="pane-likes"><div class="pane-title">Likes Log</div><div class="log-filters"><button class="filter-btn active" onclick="filterLikes('all',this)">All</button><button class="filter-btn" onclick="filterLikes('location',this)">Locations</button><button class="filter-btn" onclick="filterLikes('cast',this)">Cast</button></div><div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;"><select id="likes-project-filter" onchange="renderLikesLog()" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px 12px;font-family:'DM Mono',monospace;font-size:11px;outline:none;cursor:pointer;"><option value="all">All Projects</option></select><select id="likes-user-filter" onchange="renderLikesLog()" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px 12px;font-family:'DM Mono',monospace;font-size:11px;outline:none;cursor:pointer;"><option value="all">All Users</option></select><button class="gbtn gbtn-sm" onclick="exportLikes()">↓ Export CSV</button></div><table class="g-table"><thead><tr><th>User</th><th>Project</th><th>Scene</th><th>Photo</th><th>Type</th><th>Time</th></tr></thead><tbody id="likes-tbody"></tbody></table><div id="likes-empty" class="empty-state" style="display:none;">No likes yet.</div></div>
     </div></div>
@@ -626,9 +631,98 @@ const uz=document.getElementById('upload-zone');
 uz.addEventListener('dragover',e=>{e.preventDefault();uz.style.borderColor='rgba(255,255,255,.3)';});
 uz.addEventListener('dragleave',()=>{uz.style.borderColor='';});
 uz.addEventListener('drop',e=>{e.preventDefault();uz.style.borderColor='';const f=e.dataTransfer.files[0];if(f){selectedFile=f;document.getElementById('fname').textContent=f.name;document.getElementById('fsize').textContent=(f.size/1024/1024).toFixed(2)+' MB';document.getElementById('file-chosen').style.display='flex';document.getElementById('upload-zone').style.display='none';document.getElementById('analyze-btn').disabled=false;}});
-async function analyzeStoryboard(){const btn=document.getElementById('analyze-btn');btn.disabled=true;btn.innerHTML='<div class="spinner"></div> Analyzing...';const status=document.getElementById('analyze-status');status.innerHTML='<div class="ai-dot"></div> Reading...';document.getElementById('error-msg').style.display='none';const proj=db.galleryProjects.find(p=>p.id===activeProjectId);try{let messages;if(selectedFile&&(selectedFile.type.startsWith('image/')||selectedFile.type==='application/pdf')){const b64=await fileToBase64(selectedFile);messages=[{role:'user',content:[{type:selectedFile.type==='application/pdf'?'document':'image',source:{type:'base64',media_type:selectedFile.type,data:b64}},{type:'text',text:`Analyze this storyboard for project "${proj.name}". Extract 3-6 scenes. Return ONLY JSON:\n[{"number":"01","name":"SCENE NAME","description":"1-2 sentences","type":"location|cast|both","locationKeywords":["kw"],"castDescription":"type"}]`}]}];}else{messages=[{role:'user',content:`Generate 4 realistic storyboard scenes for film project "${proj.name}". Return ONLY JSON:\n[{"number":"01","name":"SCENE NAME","description":"1-2 sentences","type":"location|cast|both","locationKeywords":["kw"],"castDescription":"type"}]`}];}const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages})});const data=await res.json();if(data.error)throw new Error(data.error.message);const text=data.content[0].text.replace(/```json|```/g,'').trim();parsedScenes=JSON.parse(text);status.innerHTML='<span style="color:#7ecf82;">✓ '+parsedScenes.length+' scenes</span>';btn.innerHTML='✓ Analyzed';renderScenePicker(parsedScenes,proj.type);}catch(e){const em=document.getElementById('error-msg');em.textContent='AI error: '+e.message;em.style.display='block';status.innerHTML='';btn.disabled=false;btn.innerHTML='✦ Analyze with AI';}}
+const MYLIO_ID='1v4TxoOFh6YLfW01yhghdXYqZNI9vfICM';
+const CAST_FOLDER_ID='12MSryt1CaVikRrDziS9Eb9NBdu1LyL6S';
+const REGION_IDS={'ANDALUCIA':'1sjyF8y9PvMTCMh0az6Urf3sZPdKvDJwn','ARAGON':'1vvMdSWfT5p-cnVI1tM977RmwErHO24fC','ASTURIAS':'1h2fiFdyb5AO1uPwZLrVHgzzt7L9lm1Vv','BALEARES':'12LTj1uYYE3DjsDjGlFJYMXqxuTNcjFAH','CANARY ISLANDS':'1i5VacnXzSD4kjfPH6t3EnzGjsygOwyey','CANTABRIA':'1Dc2xo6jQNYY_0cPvj0une9Yqh2CIQ7jc','CASTILLAS':'17WcJE9lvhsWCGUcWDRAWEjoceF_My7ad','ANDORRA':'1KMP_Pl9xA91W9FQpFktZwf-aVOoX0bdj'};
+const CAST_CITY_IDS={'BARCELONA':'1RKEOpe0pJUBPkBub8gwTIvMhoIR5BbdG','MADRID':'1HvQDfytVfV1EX-ara5PEoBIepC3LENp6','MALAGA':'1lvy_qn4yqLpmvBIqTNBPvbMvpef_H84k','ALMERIA':'1gq_l8J5oTn6GIPJkfaEbQMM2l43hTvt9'};
+async function callAI(messages,useDrive=false){const body={model:'claude-sonnet-4-20250514',max_tokens:2000,messages};if(useDrive)body.mcp_servers=[{type:'url',url:'https://drivemcp.googleapis.com/mcp/v1',name:'google-drive'}];const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const data=await res.json();if(data.error)throw new Error(data.error.message);return data.content.find(b=>b.type==='text')?.text||'';}
+async function searchDriveForPhotos(term,parentId){try{const text=await callAI([{role:'user',content:`Use Google Drive search_files tool with query: title contains '${term.replace(/'/g,"\\'")}' and mimeType contains 'image/' and parentId = '${parentId}'. Return ONLY JSON array: [{"id":"fileId","name":"filename"}]. If no results return [].`}],true);const match=text.match(/\[[\s\S]*?\]/);if(!match)return[];const files=JSON.parse(match[0]);return files.slice(0,8).map(f=>({id:f.id,name:f.name||f.title||term,url:`https://drive.google.com/uc?id=${f.id}&export=view`,folder:term}));}catch(e){console.warn('Drive search failed:',term,e);return[];}}
+async function analyzeStoryboard(){
+  const btn=document.getElementById('analyze-btn');
+  btn.disabled=true;btn.innerHTML='<div class="spinner"></div> Analyzing...';
+  const setStatus=s=>{document.getElementById('analyze-status').innerHTML=`<div class="ai-dot"></div> ${s}`;};
+  document.getElementById('error-msg').style.display='none';
+  const proj=db.galleryProjects.find(p=>p.id===activeProjectId);
+  const region=document.getElementById('sb-region').value;
+  const types=document.getElementById('sb-types').value;
+  const notes=document.getElementById('sb-notes').value;
+  const wantLoc=types!=='cast',wantCast=types!=='locations';
+  try{
+    setStatus('Reading storyboard...');
+    const b64=await fileToBase64(selectedFile);
+    const isImg=selectedFile.type.startsWith('image/');
+    const cb=isImg?{type:'image',source:{type:'base64',media_type:selectedFile.type,data:b64}}:{type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}};
+    const prompt=`Analyze this storyboard for film project "${proj?.name||'Production'}".${notes?` Notes: ${notes}.`:''} Region: ${region||'Spain'}. Extract every scene. Return ONLY JSON array: [{"number":"01","name":"SCENE NAME UPPERCASE","description":"2-3 sentence visual description","locationType":"specific location type","castType":"cast description or null","mood":"mood keywords","needsLocation":true,"needsCast":true,"locationSearchTerms":["term1","term2"],"castSearchTerms":["term1"]}]. Return ONLY valid JSON.`;
+    const scenesText=await callAI([{role:'user',content:[cb,{type:'text',text:prompt}]}]);
+    const match=scenesText.match(/\[[\s\S]*\]/);
+    if(!match)throw new Error('Could not parse scenes');
+    parsedScenes=JSON.parse(match[0]);
+    setStatus(`✓ ${parsedScenes.length} scenes — scouting Drive...`);
+    const regionId=REGION_IDS[region];
+    const castCityId=region==='CATALUNYA'?CAST_CITY_IDS['BARCELONA']:region==='MADRID'?CAST_CITY_IDS['MADRID']:CAST_FOLDER_ID;
+    const dedup=arr=>{const s=new Set();return arr.filter(p=>{if(s.has(p.id))return false;s.add(p.id);return true;});};
+    const scenesWithPhotos=await Promise.all(parsedScenes.map(async(scene,i)=>{
+      setStatus(`Scouting scene ${i+1}/${parsedScenes.length}: ${scene.name}...`);
+      const locPhotos=[],castPhotos=[];
+      if(wantLoc&&scene.needsLocation){for(const t of(scene.locationSearchTerms||[scene.locationType||'location']).slice(0,2)){const p=await searchDriveForPhotos(t,regionId||MYLIO_ID);locPhotos.push(...p);if(locPhotos.length>=6)break;}}
+      if(wantCast&&scene.needsCast&&scene.castType){for(const t of(scene.castSearchTerms||[scene.castType]).slice(0,2)){const p=await searchDriveForPhotos(t,castCityId);castPhotos.push(...p);if(castPhotos.length>=6)break;}}
+      return{...scene,locPhotos:dedup(locPhotos).slice(0,8),castPhotos:dedup(castPhotos).slice(0,8)};
+    }));
+    document.getElementById('analyze-status').innerHTML='<span style="color:#7ecf82;">✓ Complete</span>';
+    btn.innerHTML='✓ Analyzed';
+    renderScenePicker(scenesWithPhotos,types);
+  }catch(e){
+    const em=document.getElementById('error-msg');em.textContent='Error: '+e.message;em.style.display='block';
+    document.getElementById('analyze-status').innerHTML='';btn.disabled=false;btn.innerHTML='✦ Analyze with AI';
+  }
+}
 function fileToBase64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=()=>rej(new Error('Read failed'));r.readAsDataURL(f);});}
-function renderScenePicker(scenes,galleryType){document.getElementById('scenes-section').style.display='block';sceneSelections={};const grid=document.getElementById('scenes-grid');grid.innerHTML='';scenes.forEach(scene=>{sceneSelections[scene.number]=[];let photos=[];if(galleryType!=='cast')photos=photos.concat(shuffle([...photoDB.locations]).slice(0,4).map(p=>({...p,photoType:'location'})));if(galleryType!=='locations')photos=photos.concat(shuffle([...photoDB.cast]).slice(0,2).map(p=>({...p,photoType:'cast'})));if(!photos.length)photos=shuffle([...photoDB.locations]).slice(0,4).map(p=>({...p,photoType:'location'}));const tc=scene.type==='cast'?'tb-cast':scene.type==='both'?'tb-both':'tb-loc',tl=scene.type==='cast'?'CAST':scene.type==='both'?'LOC+CAST':'LOC';const card=document.createElement('div');card.className='scene-card';card.innerHTML=`<div class="scene-card-hdr"><div><div class="scene-num">${scene.number}_</div><div class="scene-nm">${scene.name}</div></div><span class="type-badge ${tc}">${tl}</span></div><div style="padding:10px 14px;font-size:10px;color:var(--muted);line-height:1.6;">${scene.description}</div><div class="scene-photos-grid" id="spg-${scene.number}">${photos.map(p=>`<img class="thumb" src="${p.url}" data-scene="${scene.number}" data-id="${p.id}" data-url="${p.url}" data-label="${p.label}" data-ptype="${p.photoType}" onclick="toggleThumb(this)" title="${p.label}">`).join('')}</div><div class="scene-foot"><span class="sel-count" id="sc-${scene.number}">0 selected</span><button class="gbtn gbtn-sm" onclick="selectAllScene('${scene.number}')">All</button></div>`;grid.appendChild(card);});}
+function renderScenePicker(scenes, types){
+  document.getElementById('scenes-section').style.display='block';
+  sceneSelections={};
+  const grid=document.getElementById('scenes-grid');
+  grid.innerHTML='';
+  const wantLoc=types!=='cast', wantCast=types!=='locations';
+  scenes.forEach(scene=>{
+    sceneSelections[scene.number]=[];
+    const card=document.createElement('div');
+    card.className='scene-card';
+    card.style.cssText='margin-bottom:20px;';
+    
+    let photosHtml='';
+    
+    if(wantLoc && scene.needsLocation){
+      const lPhotos=scene.locPhotos||[];
+      const locHtml=lPhotos.length
+        ? lPhotos.map(p=>`<img class="thumb" src="${p.url}" data-scene="${scene.number}" data-id="${p.id}" data-url="${p.url}" data-label="${p.name}" data-ptype="location" onclick="toggleThumb(this)" title="${p.name}" onerror="this.style.display='none'">`).join('')
+        : `<div style="grid-column:1/-1;padding:16px;text-align:center;font-size:10px;color:var(--muted);border:1px dashed var(--border);">No location photos found — try a different region or search term</div>`;
+      photosHtml+=`<div style="font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin:10px 14px 6px;">📍 Locations</div><div class="scene-photos-grid" id="spg-loc-${scene.number}">${locHtml}</div>`;
+    }
+    
+    if(wantCast && scene.needsCast){
+      const cPhotos=scene.castPhotos||[];
+      const castHtml=cPhotos.length
+        ? cPhotos.map(p=>`<img class="thumb" src="${p.url}" data-scene="${scene.number}" data-id="${p.id}" data-url="${p.url}" data-label="${p.name}" data-ptype="cast" onclick="toggleThumb(this)" title="${p.name}" onerror="this.style.display='none'">`).join('')
+        : `<div style="grid-column:1/-1;padding:16px;text-align:center;font-size:10px;color:var(--muted);border:1px dashed var(--border);">No cast photos found for: ${scene.castType||'this scene'}</div>`;
+      photosHtml+=`<div style="font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin:10px 14px 6px;">👤 Cast</div><div class="scene-photos-grid" id="spg-cast-${scene.number}">${castHtml}</div>`;
+    }
+    
+    const typeBadge=wantLoc&&wantCast?'tb-both':wantCast?'tb-cast':'tb-loc';
+    const typeLabel=wantLoc&&wantCast?'LOC+CAST':wantCast?'CAST':'LOC';
+    
+    card.innerHTML=`
+      <div class="scene-card-hdr">
+        <div><div class="scene-num">${scene.number}_</div><div class="scene-nm">${scene.name}</div></div>
+        <span class="type-badge ${typeBadge}">${typeLabel}</span>
+      </div>
+      <div style="padding:10px 14px;font-size:10px;color:var(--muted);line-height:1.6;">${scene.description}</div>
+      ${photosHtml}
+      <div class="scene-foot"><span class="sel-count" id="sc-${scene.number}">0 selected</span><button class="gbtn gbtn-sm" onclick="selectAllScene('${scene.number}')">All</button></div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
 function toggleThumb(el){const s=el.dataset.scene,id=el.dataset.id,arr=sceneSelections[s],idx=arr.findIndex(p=>p.id===id);if(idx>=0){arr.splice(idx,1);el.classList.remove('selected');}else{arr.push({id,url:el.dataset.url,label:el.dataset.label,photoType:el.dataset.ptype});el.classList.add('selected');}document.getElementById('sc-'+s).textContent=arr.length+' selected';}
 function selectAllScene(sId){sceneSelections[sId]=[];document.querySelectorAll(`[data-scene="${sId}"]`).forEach(el=>{sceneSelections[sId].push({id:el.dataset.id,url:el.dataset.url,label:el.dataset.label,photoType:el.dataset.ptype});el.classList.add('selected');});document.getElementById('sc-'+sId).textContent=sceneSelections[sId].length+' selected';}
 function publishGallery(){const proj=db.galleryProjects.find(p=>p.id===activeProjectId);if(!parsedScenes.length){alert('Please analyze a storyboard first.');return;}proj.scenes=parsedScenes.map(sc=>({number:sc.number,name:sc.name,description:sc.description,type:sc.type,photos:(sceneSelections[sc.number]||[])})).filter(sc=>sc.photos.length>0);renderAdminProjects();alert(`✓ Published — "${proj.name}" · ${proj.scenes.length} scenes`);}
