@@ -123,7 +123,9 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
 .be-btn-red{border-color:rgba(193,59,42,.35);color:#f08080;}
 .be-btn-red:hover{background:rgba(193,59,42,.12);}
 .be-shell{display:none;padding-top:64px;}
-.be-topbar{position:fixed;top:0;left:0;right:0;z-index:500;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;}
+.be-topbar{position:fixed;top:0;left:0;right:0;z-index:201;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;pointer-events:none;visibility:hidden;}
+.be-shell{display:none;padding-top:64px;}
+.be-shell[style*="block"] .be-topbar,.be-shell[style*="block"]>.be-topbar{pointer-events:auto;visibility:visible;}
 .be-topbar-logo{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.25em;color:var(--text);}
 .be-tabs{display:flex;}
 .be-tab{padding:8px 20px;font-size:9px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all .15s;background:none;border-left:none;border-right:none;border-top:none;font-family:'DM Mono',monospace;}
@@ -384,7 +386,7 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
 <body>
 
 <nav id="site-nav">
-  <a class="nav-logo" onclick="showPage('home')"><img id="site-logo" alt="Family" style="height:40px;width:auto;"></a>
+  <a class="nav-logo" onclick="showPage('home')"><img id="site-logo" src="/logo.png" alt="Family" style="height:40px;width:auto;"></a>
   <button id="nav-hamburger" onclick="toggleMobileNav()" style="display:none;background:none;border:none;cursor:pointer;padding:4px;flex-direction:column;gap:5px;">
     <span style="display:block;width:22px;height:1px;background:var(--text);"></span>
     <span style="display:block;width:22px;height:1px;background:var(--text);"></span>
@@ -618,7 +620,7 @@ document.getElementById('vlb').addEventListener('click',function(e){if(e.target=
 
 function toggleMobileNav(){const list=document.getElementById('nav-links-list');list.classList.toggle('open');const closeBtn=list.querySelector('.nav-close');if(closeBtn)closeBtn.style.display=list.classList.contains('open')?'block':'none';}
 function closeMobileNav(){const list=document.getElementById('nav-links-list');list.classList.remove('open');const closeBtn=list.querySelector('.nav-close');if(closeBtn)closeBtn.style.display='none';}
-function showPage(id){closeMobileNav();document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');const ne=document.getElementById('nav-'+id);if(ne)ne.classList.add('active');window.scrollTo(0,0);const isG=id==='gallery';const isBE=id==='backend';document.getElementById('site-nav').style.display=(isG||isBE)?'none':'flex';document.getElementById('gallery-nav-bar').classList.toggle('active',isG);if(id==='film')renderFilmGrid();if(id==='stills')renderStillsPage();if(id==='home')renderHomeGrid();if(id==='backend')renderBeFilmTable();}
+function showPage(id){try{closeMobileNav();}catch(e){}document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));const pg=document.getElementById('page-'+id);if(pg)pg.classList.add('active');const ne=document.getElementById('nav-'+id);if(ne)ne.classList.add('active');window.scrollTo(0,0);const isG=id==='gallery';const isBE=id==='backend';const sn=document.getElementById('site-nav');if(sn)sn.style.display=(isG||isBE)?'none':'flex';const gnb=document.getElementById('gallery-nav-bar');if(gnb)gnb.classList.toggle('active',isG);try{if(id==='film')renderFilmGrid();}catch(e){}try{if(id==='stills')renderStillsPage();}catch(e){}try{if(id==='home')renderHomeGrid();}catch(e){}try{if(id==='backend')renderBeFilmTable();}catch(e){}}
 
 function makeFilmItem(p,idx){
   const d=document.createElement('div');
