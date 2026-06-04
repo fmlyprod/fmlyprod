@@ -976,31 +976,27 @@ function azRenderScenes(scenes,wantLoc,wantCast){
   const c=document.getElementById('az-scenes');
   c.innerHTML='<div style="font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-bottom:20px;">'+scenes.length+' scenes extracted</div>';
   scenes.forEach((scene,si)=>{
-    // Handle both long and compact field names
     const desc=scene.description||scene.desc||'';
     const locType=scene.locationType||scene.loc||'location';
     const castType=scene.castType||scene.cast||'';
-    const needsLoc=scene.needsLocation||scene.needsLoc||true;
-    const needsCast=scene.needsCast||scene.needsCast2||false;
-
+    const needsLoc=wantLoc;
+    const needsCast=(scene.needsCast||scene.needsCast2||!!castType)&&wantCast;
     const card=document.createElement('div');
     card.style.cssText='border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:20px;';
     let ph='';
-    if(wantLoc&&needsLoc){
+    if(needsLoc){
       const photos=scene.locPhotos||[];
-      const g=photos.length
-        ?photos.map(p=>'<img src="'+p.url+'" title="'+p.name+'" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:2px;cursor:pointer;" onerror="this.style.display='none'" onclick="window.open(''+p.url+'','_blank')">').join('')
-        :'<div style="grid-column:1/-1;padding:14px;text-align:center;font-size:10px;color:var(--muted);border:1px dashed var(--border);border-radius:4px;">No locations found for &ldquo;'+locType+'&rdquo; in Madrid</div>';
-      ph+='<div style="padding:10px 14px 4px;font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;">📍 Locations — '+locType+'</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;padding:8px 14px 14px;">'+g+'</div>';
+      const items=photos.map(function(p){return '<img src="'+p.url+'" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:2px;">';}).join('');
+      const g=photos.length?items:'<div style="padding:14px;text-align:center;font-size:10px;color:var(--muted);">No locations found for: '+locType+'</div>';
+      ph+='<div style="padding:10px 14px 4px;font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;">LOCATIONS</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;padding:8px 14px 14px;">'+g+'</div>';
     }
-    if(wantCast&&needsCast&&castType){
+    if(needsCast&&castType){
       const photos=scene.castPhotos||[];
-      const g=photos.length
-        ?photos.map(p=>'<img src="'+p.url+'" title="'+p.name+'" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:2px;cursor:pointer;" onerror="this.style.display='none'">').join('')
-        :'<div style="grid-column:1/-1;padding:14px;text-align:center;font-size:10px;color:var(--muted);border:1px dashed var(--border);border-radius:4px;">No cast found for &ldquo;'+castType+'&rdquo;</div>';
-      ph+='<div style="padding:10px 14px 4px;font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;">👤 Cast — '+castType+'</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;padding:8px 14px 14px;">'+g+'</div>';
+      const items=photos.map(function(p){return '<img src="'+p.url+'" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:2px;">';}).join('');
+      const g=photos.length?items:'<div style="padding:14px;text-align:center;font-size:10px;color:var(--muted);">No cast found for: '+castType+'</div>';
+      ph+='<div style="padding:10px 14px 4px;font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;">CAST</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;padding:8px 14px 14px;">'+g+'</div>';
     }
-    card.innerHTML='<div style="padding:12px 14px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px;"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:26px;color:var(--accent);min-width:34px;">'+(String(si+1).padStart(2,'0'))+'</div><div><div style="font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;">'+scene.name+'</div><div style="font-size:10px;color:var(--muted);margin-top:3px;line-height:1.6;">'+desc+'</div></div></div>'+ph+'<div style="height:6px;"></div>';
+    card.innerHTML=`<div style="padding:12px 14px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--accent);min-width:34px;">${String(si+1).padStart(2,"0")}</div><div><div style="font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;">${scene.name}</div><div style="font-size:10px;color:var(--muted);margin-top:3px;line-height:1.6;">${desc}</div></div></div>${ph}<div style="height:6px;"></div>`;
     c.appendChild(card);
   });
 }
