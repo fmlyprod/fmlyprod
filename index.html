@@ -955,7 +955,7 @@ async function azAnalyze(){
       setS('Scouting '+scene.name+' ('+( i+1)+'/'+scenes.length+')...');
       const lp=[],cp=[];
       const needsL=scene.needsLocation||scene.needsLoc;const needsC=scene.needsCast||scene.needsCast;const locT=scene.locationSearchTerms||scene.locTerms||[scene.locationType||scene.loc||'location'];const castT=scene.castSearchTerms||scene.castTerms||[scene.castType||scene.cast||'person'];const castDesc=scene.castType||scene.cast;
-      if(wantLoc&&needsL){const bestFolder=await findBestFolderForScene(scene.loc||scene.locationType||'location',region);const p=await searchDriveForPhotos(scene.loc||scene.locationType||'location',regionId||MYLIO_ID,region);lp.push(...p);}
+      if(wantLoc&&needsL){const p=await searchDriveForPhotos(scene.loc||scene.locationType||'location',regionId||MYLIO_ID,region);lp.push(...p);}
       if(wantCast&&castDesc){const p=await searchDriveForPhotos(castDesc,castCityId,'CAST');cp.push(...p);}
       return{...scene,locPhotos:dedup(lp).slice(0,8),castPhotos:dedup(cp).slice(0,8)};
     }));
