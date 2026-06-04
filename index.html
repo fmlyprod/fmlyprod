@@ -673,10 +673,102 @@ uz.addEventListener('dragleave',()=>{uz.style.borderColor='';});
 uz.addEventListener('drop',e=>{e.preventDefault();uz.style.borderColor='';const f=e.dataTransfer.files[0];if(f){selectedFile=f;document.getElementById('fname').textContent=f.name;document.getElementById('fsize').textContent=(f.size/1024/1024).toFixed(2)+' MB';document.getElementById('file-chosen').style.display='flex';document.getElementById('upload-zone').style.display='none';document.getElementById('analyze-btn').disabled=false;}});
 const MYLIO_ID='1v4TxoOFh6YLfW01yhghdXYqZNI9vfICM';
 const CAST_FOLDER_ID='12MSryt1CaVikRrDziS9Eb9NBdu1LyL6S';
-const REGION_IDS={'ANDALUCIA':'1sjyF8y9PvMTCMh0az6Urf3sZPdKvDJwn','ARAGON':'1vvMdSWfT5p-cnVI1tM977RmwErHO24fC','ASTURIAS':'1h2fiFdyb5AO1uPwZLrVHgzzt7L9lm1Vv','BALEARES':'12LTj1uYYE3DjsDjGlFJYMXqxuTNcjFAH','CANARY ISLANDS':'1i5VacnXzSD4kjfPH6t3EnzGjsygOwyey','CANTABRIA':'1Dc2xo6jQNYY_0cPvj0une9Yqh2CIQ7jc','CASTILLAS':'17WcJE9lvhsWCGUcWDRAWEjoceF_My7ad','ANDORRA':'1KMP_Pl9xA91W9FQpFktZwf-aVOoX0bdj'};
+
+// Region root folder IDs
+const REGION_IDS={
+  'MADRID':'1N1rMt6L1trB6GfYYIM0YPBxcRrPuwSon',
+  'ANDALUCIA':'1DIYNo5yoLeohqT6PFR5GmFoIsKb1njGB',
+  'VALENCIA':'195yhOeR5qdDpqYQqZ68oDRiF3-8TFgxS',
+  'ARAGON':'1vvMdSWfT5p-cnVI1tM977RmwErHO24fC',
+  'ASTURIAS':'1h2fiFdyb5AO1uPwZLrVHgzzt7L9lm1Vv',
+  'BALEARES':'12LTj1uYYE3DjsDjGlFJYMXqxuTNcjFAH',
+  'CANARY ISLANDS':'1i5VacnXzSD4kjfPH6t3EnzGjsygOwyey',
+  'CANTABRIA':'1Dc2xo6jQNYY_0cPvj0une9Yqh2CIQ7jc',
+  'CASTILLAS':'17WcJE9lvhsWCGUcWDRAWEjoceF_My7ad',
+  'ANDORRA':'1KMP_Pl9xA91W9FQpFktZwf-aVOoX0bdj',
+  'GALICIA':'1pRGwGLm766Y5WLSXRGMrzwPlWbCta99C',
+  'PAIS VASCO':'1WFSANDY93AvyXPmI0S_gsJxMl9Qkzw8G',
+  'PORTUGAL':'14gUsQYcTgCwL4GjF-y0eJLZxNCZucDmf',
+};
+
+// Complete Madrid subfolder map (name → id)
+const MADRID_FOLDERS=[
+  {name:'STREETS MAD',id:'1Oq9Jf6oyB_vMk2j_Y4Nzeaz5mpgDHoAU',keywords:['street','urban','city','road','pavement','exterior','outdoor']},
+  {name:'ART GALLERY MAD',id:'1fiaPEQdCV2eh5lk60g1h-zxZLrf8X7GQ',keywords:['gallery','art','museum','exhibition','creative','studio','modern']},
+  {name:'FIREBRIGADE MAD',id:'1PtWrytvNHpDdwDz62H10zBYKgI9JZ7NL',keywords:['fire','brigade','station','industrial','warehouse','garage']},
+  {name:'PARKS MAD',id:'15xdD2zLRNX1tN6GnTbebS0VBcS96YCup',keywords:['park','garden','outdoor','nature','green','grass','trees']},
+  {name:'HOTELS MAD',id:'1vKyQakUarvZad18I0Cp0E6NESjwcKQzk',keywords:['hotel','lobby','conference','meeting','office','corporate','reception','ballroom','luxury']},
+  {name:'FACADES MAD',id:'1h-gI8abi7Lnq2CvN3AYhi-c2OvXWMxDx',keywords:['facade','exterior','building','architecture','entrance']},
+  {name:'MARQUEE MAD',id:'1Xt1FgyfiE1m6uKfbo75CIqqxc_XdovBh',keywords:['marquee','tent','event','outdoor event','party','wedding']},
+  {name:'SUPERMARKET MAD',id:'1uVmqW4rG2q1_WgHRK4xarAzdyRtc_5SQ',keywords:['supermarket','shop','store','retail','market','grocery']},
+  {name:'RACETRACK MAD',id:'17K64Amdixe4LaMsMoZy8K8LpJW51v3Yu',keywords:['racetrack','race','track','sport','car','speed','circuit']},
+  {name:'SHOPS MAD',id:'1w7jaNBxgEwB12TvQ1yK4N9Rk706Nl407',keywords:['shop','store','retail','boutique','commercial']},
+];
+
+// Match location type to relevant Madrid folders (may return multiple)
+function matchMadridFolders(locationType){
+  const loc=locationType.toLowerCase();
+  const matches=[];
+  MADRID_FOLDERS.forEach(f=>{
+    const score=f.keywords.filter(k=>loc.includes(k)||k.includes(loc.split(' ')[0])).length;
+    if(score>0) matches.push({...f,score});
+  });
+  matches.sort((a,b)=>b.score-a.score);
+  // Return top 3 matching folders for diversity
+  return matches.slice(0,3).map(f=>f.id);
+}
+
 const CAST_CITY_IDS={'BARCELONA':'1RKEOpe0pJUBPkBub8gwTIvMhoIR5BbdG','MADRID':'1HvQDfytVfV1EX-ara5PEoBIepC3LENp6','MALAGA':'1lvy_qn4yqLpmvBIqTNBPvbMvpef_H84k','ALMERIA':'1gq_l8J5oTn6GIPJkfaEbQMM2l43hTvt9'};
+
+
 async function callAI(messages,useDrive=false){const body={model:'claude-sonnet-4-5',max_tokens:4000,messages};if(useDrive)body.mcp_servers=[{type:'url',url:'https://drivemcp.googleapis.com/mcp/v1',name:'google-drive'}];const res=await fetch('https://fmly-ai-proxy.fmlyprod.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const data=await res.json();if(data.error)throw new Error(data.error.message);return data.content.find(b=>b.type==='text')?.text||'';}
-async function searchDriveForPhotos(term,parentId){try{const text=await callAI([{role:'user',content:`Use Google Drive search_files tool with query: title contains '${term.replace(/'/g,"\\'")}' and mimeType contains 'image/' and parentId = '${parentId}'. Return ONLY JSON array: [{"id":"fileId","name":"filename"}]. If no results return [].`}],true);const match=text.match(/\[[\s\S]*?\]/);if(!match)return[];const files=JSON.parse(match[0]);return files.slice(0,8).map(f=>({id:f.id,name:f.name||f.title||term,url:`https://drive.google.com/uc?id=${f.id}&export=view`,folder:term}));}catch(e){console.warn('Drive search failed:',term,e);return[];}}
+// Get diverse photos from multiple matching folders (1-2 per folder)
+async function searchDriveForPhotos(locationType, regionId, region){
+  try{
+    let folderIds=[];
+
+    // Use hardcoded Madrid folder map for speed & accuracy
+    if(region==='MADRID'){
+      folderIds=matchMadridFolders(locationType);
+      // If no match, use all folders for broad scene types
+      if(!folderIds.length) folderIds=MADRID_FOLDERS.slice(0,3).map(f=>f.id);
+    } else {
+      // For other regions, fall back to searching subfolders dynamically
+      const folderText=await callAI([{role:'user',content:`Use Google Drive search_files MCP tool. Query: mimeType = 'application/vnd.google-apps.folder' and parentId = '${regionId}'. Return ONLY JSON array (max 15): [{"id":"folderId","name":"folderName"}].`}],true);
+      const fm=folderText.match(/\[[\s\S]*?\]/);
+      if(fm){
+        try{
+          const folders=JSON.parse(fm[0]);
+          const loc=locationType.toLowerCase();
+          folders.forEach(f=>{
+            const fn=(f.name||f.title||'').toLowerCase();
+            const words=loc.split(/\s+/);
+            if(words.some(w=>w.length>3&&fn.includes(w))) folderIds.push(f.id);
+          });
+          if(!folderIds.length&&folders.length) folderIds=folders.slice(0,2).map(f=>f.id);
+        }catch(e){}
+      }
+      if(!folderIds.length) folderIds=[regionId];
+    }
+
+    // Fetch 2 photos from each matching folder for diversity
+    const allPhotos=[];
+    await Promise.all(folderIds.map(async fid=>{
+      try{
+        const imgText=await callAI([{role:'user',content:`Use Google Drive search_files MCP tool. Query: mimeType contains 'image/' and parentId = '${fid}'. Return ONLY JSON array (first 6 results): [{"id":"fileId","name":"filename"}]. If empty return [].`}],true);
+        const im=imgText.match(/\[[\s\S]*?\]/);
+        if(!im)return;
+        const files=JSON.parse(im[0]);
+        // Take 2 from each folder for diversity
+        files.slice(0,2).forEach(f=>{
+          allPhotos.push({id:f.id,name:f.name||f.title||locationType,url:`https://drive.google.com/uc?id=${f.id}&export=view`,folder:locationType});
+        });
+      }catch(e){console.warn('Folder fetch failed:',fid,e);}
+    }));
+
+    return allPhotos;
+  }catch(e){console.warn('Drive search failed:',locationType,e);return[];}
+}
 async function analyzeStoryboard(){
   const btn=document.getElementById('analyze-btn');
   btn.disabled=true;btn.innerHTML='<div class="spinner"></div> Analyzing...';
@@ -862,8 +954,8 @@ async function azAnalyze(){
       setS('Scouting '+scene.name+' ('+( i+1)+'/'+scenes.length+')...');
       const lp=[],cp=[];
       const needsL=scene.needsLocation||scene.needsLoc;const needsC=scene.needsCast||scene.needsCast;const locT=scene.locationSearchTerms||scene.locTerms||[scene.locationType||scene.loc||'location'];const castT=scene.castSearchTerms||scene.castTerms||[scene.castType||scene.cast||'person'];const castDesc=scene.castType||scene.cast;
-      if(wantLoc&&needsL){for(const t of locT.slice(0,2)){const p=await searchDriveForPhotos(t,regionId||MYLIO_ID);lp.push(...p);if(lp.length>=6)break;}}
-      if(wantCast&&castDesc){for(const t of castT.slice(0,2)){const p=await searchDriveForPhotos(t,castCityId);cp.push(...p);if(cp.length>=6)break;}}
+      if(wantLoc&&needsL){const bestFolder=await findBestFolderForScene(scene.loc||scene.locationType||'location',region);const p=await searchDriveForPhotos(scene.loc||scene.locationType||'location',regionId||MYLIO_ID,region);lp.push(...p);}
+      if(wantCast&&castDesc){const p=await searchDriveForPhotos(castDesc,castCityId,'CAST');cp.push(...p);}
       return{...scene,locPhotos:dedup(lp).slice(0,8),castPhotos:dedup(cp).slice(0,8)};
     }));
     document.getElementById('az-loading').style.display='none';
