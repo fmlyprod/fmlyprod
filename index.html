@@ -396,7 +396,7 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
     <li><a onclick="showPage('contact')" id="nav-contact">Contact</a></li>
     <li><a onclick="showPage('gallery')" id="nav-gallery">Access</a></li>
     <li><a onclick="showPage('backend')" id="nav-backend" style="color:var(--dim);">⚙</a></li>
-    <li><button class="nav-close" onclick="closeMobileNav()">✕</button></li>
+    <li><button class="nav-close" onclick="closeMobileNav()" style="display:none;">✕</button></li>
   </ul>
 </nav>
 
@@ -616,8 +616,8 @@ function openVLB(url,label){const v=document.getElementById('vlb-video');v.src=u
 function closeVLB(){const v=document.getElementById('vlb-video');v.pause();v.src='';document.getElementById('vlb').classList.remove('show');}
 document.getElementById('vlb').addEventListener('click',function(e){if(e.target===this||e.target===document.getElementById('vlb-wrap'))closeVLB();});
 
-function toggleMobileNav(){document.getElementById('nav-links-list').classList.toggle('open');}
-function closeMobileNav(){document.getElementById('nav-links-list').classList.remove('open');}
+function toggleMobileNav(){const list=document.getElementById('nav-links-list');list.classList.toggle('open');const closeBtn=list.querySelector('.nav-close');if(closeBtn)closeBtn.style.display=list.classList.contains('open')?'block':'none';}
+function closeMobileNav(){const list=document.getElementById('nav-links-list');list.classList.remove('open');const closeBtn=list.querySelector('.nav-close');if(closeBtn)closeBtn.style.display='none';}
 function showPage(id){closeMobileNav();document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');const ne=document.getElementById('nav-'+id);if(ne)ne.classList.add('active');window.scrollTo(0,0);const isG=id==='gallery';const isBE=id==='backend';document.getElementById('site-nav').style.display=(isG||isBE)?'none':'flex';document.getElementById('gallery-nav-bar').classList.toggle('active',isG);if(id==='film')renderFilmGrid();if(id==='stills')renderStillsPage();if(id==='home')renderHomeGrid();if(id==='backend')renderBeFilmTable();}
 
 function makeFilmItem(p,idx){
@@ -954,7 +954,7 @@ async function azAnalyze(){
     const swp=await Promise.all(scenes.map(async(scene,i)=>{
       setS('Scouting '+scene.name+' ('+( i+1)+'/'+scenes.length+')...');
       const lp=[],cp=[];
-      const needsL=scene.needsLocation||scene.needsLoc;const needsC=scene.needsCast||scene.needsCast;const locT=scene.locationSearchTerms||scene.locTerms||[scene.locationType||scene.loc||'location'];const castT=scene.castSearchTerms||scene.castTerms||[scene.castType||scene.cast||'person'];const castDesc=scene.castType||scene.cast;
+      const needsL=scene.needsLocation||scene.needsLoc||wantLoc;const needsC=scene.needsCast||!!scene.castTerms||!!scene.cast;const locT=scene.locationSearchTerms||scene.locTerms||[scene.locationType||scene.loc||'location'];const castT=scene.castSearchTerms||scene.castTerms||[scene.castType||scene.cast||'person'];const castDesc=scene.castType||scene.cast;
       if(wantLoc&&needsL){const p=await searchDriveForPhotos(scene.loc||scene.locationType||'location',regionId||MYLIO_ID,region);lp.push(...p);}
       if(wantCast&&castDesc){const p=await searchDriveForPhotos(castDesc,castCityId,'CAST');cp.push(...p);}
       return{...scene,locPhotos:dedup(lp).slice(0,8),castPhotos:dedup(cp).slice(0,8)};
@@ -975,23 +975,31 @@ function azRenderScenes(scenes,wantLoc,wantCast){
   const c=document.getElementById('az-scenes');
   c.innerHTML='<div style="font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-bottom:20px;">'+scenes.length+' scenes extracted</div>';
   scenes.forEach((scene,si)=>{
+    // Handle both long and compact field names
+    const desc=scene.description||scene.desc||'';
+    const locType=scene.locationType||scene.loc||'location';
+    const castType=scene.castType||scene.cast||'';
+    const needsLoc=scene.needsLocation||scene.needsLoc||true;
+    const needsCast=scene.needsCast||scene.needsCast2||false;
+
     const card=document.createElement('div');
     card.style.cssText='border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:20px;';
     let ph='';
-    if(wantLoc&&scene.needsLocation){
+    if(wantLoc&&needsLoc){
       const photos=scene.locPhotos||[];
-      const g=photos.length?photos.map(p=>'<img src="'+p.url+'" title="'+p.name+'" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:2px;" onerror="this.style.display=\'none\'">').join(''):'<div style="grid-column:1/-1;padding:14px;text-align:center;font-size:10px;color:var(--muted);border:1px dashed var(--border);border-radius:4px;">No locations found for &ldquo;'+scene.locationType+'&rdquo;</div>';
-      ph+='<div style="padding:10px 14px 4px;font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;">📍 Locations</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px;padding:6px 14px;">'+g+'</div>';
+      const g=photos.length
+        ?photos.map(p=>'<img src="'+p.url+'" title="'+p.name+'" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:2px;cursor:pointer;" onerror="this.style.display='none'" onclick="window.open(''+p.url+'','_blank')">').join('')
+        :'<div style="grid-column:1/-1;padding:14px;text-align:center;font-size:10px;color:var(--muted);border:1px dashed var(--border);border-radius:4px;">No locations found for &ldquo;'+locType+'&rdquo; in Madrid</div>';
+      ph+='<div style="padding:10px 14px 4px;font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;">📍 Locations — '+locType+'</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;padding:8px 14px 14px;">'+g+'</div>';
     }
-    if(wantCast&&scene.needsCast){
+    if(wantCast&&needsCast&&castType){
       const photos=scene.castPhotos||[];
-      const g=photos.length?photos.map(p=>'<img src="'+p.url+'" title="'+p.name+'" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:2px;" onerror="this.style.display=\'none\'">').join(''):'<div style="grid-column:1/-1;padding:14px;text-align:center;font-size:10px;color:var(--muted);border:1px dashed var(--border);border-radius:4px;">No cast found for &ldquo;'+(scene.castType||'this scene')+'&rdquo;</div>';
-      ph+='<div style="padding:10px 14px 4px;font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;">👤 Cast</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px;padding:6px 14px;">'+g+'</div>';
+      const g=photos.length
+        ?photos.map(p=>'<img src="'+p.url+'" title="'+p.name+'" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:2px;cursor:pointer;" onerror="this.style.display='none'">').join('')
+        :'<div style="grid-column:1/-1;padding:14px;text-align:center;font-size:10px;color:var(--muted);border:1px dashed var(--border);border-radius:4px;">No cast found for &ldquo;'+castType+'&rdquo;</div>';
+      ph+='<div style="padding:10px 14px 4px;font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;">👤 Cast — '+castType+'</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;padding:8px 14px 14px;">'+g+'</div>';
     }
-    card.innerHTML='<div style="padding:12px 14px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px;"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:26px;color:var(--accent);min-width:34px;">'+(String(si+1).padStart(2,'0'))+'</div><div><div style="font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;">'+scene.name+'</div><div style="font-size:10px;color:var(--muted);margin-top:3px;line-height:1.6;">'+scene.description+'</div></div></div>'+ph+'<div style="height:6px;"></div>';
+    card.innerHTML='<div style="padding:12px 14px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px;"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:26px;color:var(--accent);min-width:34px;">'+(String(si+1).padStart(2,'0'))+'</div><div><div style="font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;">'+scene.name+'</div><div style="font-size:10px;color:var(--muted);margin-top:3px;line-height:1.6;">'+desc+'</div></div></div>'+ph+'<div style="height:6px;"></div>';
     c.appendChild(card);
   });
 }
-</script>
-</body>
-</html>
