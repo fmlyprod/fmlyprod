@@ -298,13 +298,15 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
 /* ── MOBILE ── */
 @media(max-width:768px){
   /* NAV */
-  nav#site-nav{padding:14px 20px;}
-  .nav-logo img{height:28px;}
+  nav#site-nav{padding:12px 20px;height:56px;}
+  .nav-logo img{height:32px!important;width:auto!important;}
   .nav-links{gap:18px;}
   .nav-links a{font-size:9px;letter-spacing:.12em;}
   #nav-backend{display:none;}
+  #nav-hamburger{display:flex!important;}
 
   /* HERO */
+  .hero-content{padding-top:56px!important;}
   .hero-content img{height:clamp(50px,18vw,90px)!important;}
   .hero-tagline{font-size:9px;letter-spacing:.15em;padding:0 20px;}
   .hero-scroll{display:none;}
@@ -441,10 +443,10 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
       <div class="ws-overlay"></div>
       <div class="ws-label"><h2>FILM</h2><p>Commercials · Music Videos · Branded</p></div>
     </div>
-    <div class="ws-side" onclick="showPage('stills')">
+    <div class="ws-side" style="cursor:default;" onclick="void(0)">
       <video class="ws-bg" autoplay muted loop playsinline><source src="https://cdn.prod.website-files.com/681dd6f1f4250075bf79816b/682c8c3a32f4a5836a71d70c_videoplayback%20%282%29-transcode.mp4" type="video/mp4"></video>
       <div class="ws-overlay"></div>
-      <div class="ws-label"><h2>STILLS</h2><p>Photo · Fashion · Editorial</p></div>
+      <div class="ws-label"><h2 style="opacity:0.25;">STILLS</h2><p style="opacity:0.25;">Coming Soon</p></div>
     </div>
   </div>
 </div>
@@ -559,7 +561,7 @@ const photoDB={locations:[{id:'l1',url:'https://images.unsplash.com/photo-155568
 let currentUser=null,loginTab='admin',likesFilter='all',activeProjectId='p1',selectedFile=null,parsedScenes=[],sceneSelections={};
 
 // LOGO
-document.querySelectorAll('#site-logo,#gnb-logo-img').forEach(i=>{i.src='https://github.com/fmlyprod/fmlyprod/blob/main/logo.png?raw=true';i.style.height='40px';i.style.width='auto';});
+document.querySelectorAll('#site-logo,#gnb-logo-img').forEach(i=>{i.src='https://github.com/fmlyprod/fmlyprod/blob/main/logo.png?raw=true';if(window.innerWidth>768){i.style.height='40px';i.style.width='auto';}});
 document.getElementById('about-photo').src='https://github.com/fmlyprod/fmlyprod/blob/main/about.jpg?raw=true';
 // Replace above line with your actual photo URL once uploaded to GitHub
 
