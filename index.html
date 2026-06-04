@@ -293,7 +293,8 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
   #nav-links-list{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;gap:36px;z-index:300;}
   #nav-links-list.open{display:flex!important;}
   #nav-links-list a{font-size:14px!important;letter-spacing:.25em;}
-  #nav-links-list .nav-close{position:absolute;top:24px;right:24px;background:none;border:none;color:var(--text);font-size:24px;cursor:pointer;}
+  #nav-links-list .nav-close{position:absolute;top:24px;right:24px;background:none;border:none;color:var(--text);font-size:24px;cursor:pointer;display:none;}
+  #nav-links-list.open .nav-close{display:block;}
 }
 /* ── MOBILE ── */
 @media(max-width:768px){
@@ -302,7 +303,7 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
   .nav-logo img{height:32px!important;width:auto!important;}
   .nav-links{gap:18px;}
   .nav-links a{font-size:9px;letter-spacing:.12em;}
-  #nav-backend{display:none;}
+  #nav-backend{display:none!important;}
   #nav-hamburger{display:flex!important;}
 
   /* HERO */
@@ -606,7 +607,7 @@ const photoDB={locations:[{id:'l1',url:'https://images.unsplash.com/photo-155568
 let currentUser=null,loginTab='admin',likesFilter='all',activeProjectId='p1',selectedFile=null,parsedScenes=[],sceneSelections={};
 
 // LOGO
-document.querySelectorAll('#site-logo,#gnb-logo-img').forEach(i=>{i.src='https://github.com/fmlyprod/fmlyprod/blob/main/logo.png?raw=true';if(window.innerWidth>768){i.style.height='40px';i.style.width='auto';}});
+document.querySelectorAll('#site-logo,#gnb-logo-img').forEach(i=>{i.src='https://github.com/fmlyprod/fmlyprod/blob/main/logo.png?raw=true';i.style.height='40px';i.style.width='auto';});
 document.getElementById('about-photo').src='https://github.com/fmlyprod/fmlyprod/blob/main/about.jpg?raw=true';
 // Replace above line with your actual photo URL once uploaded to GitHub
 
@@ -912,7 +913,7 @@ function repairJSON(str){
   if(!m) return null;
   let s = m[0];
   // Remove control chars
-  s = s.replace(/[ --]/g, ' ');
+  s = s.replace(/[--]/g, ' ');
   // Fix trailing commas
   s = s.replace(/,(\s*[}\]])/g, '$1');
   // Try parse
