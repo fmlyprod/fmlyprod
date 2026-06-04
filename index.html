@@ -608,7 +608,7 @@ let currentUser=null,loginTab='admin',likesFilter='all',activeProjectId='p1',sel
 
 // LOGO
 document.querySelectorAll('#site-logo,#gnb-logo-img').forEach(i=>{i.src='https://raw.githubusercontent.com/fmlyprod/fmlyprod/main/logo.png';i.style.height='40px';i.style.width='auto';});
-document.getElementById('about-photo').src='https://raw.githubusercontent.com/fmlyprod/fmlyprod/main/about.jpg';
+const ap=document.getElementById('about-photo');if(ap)ap.src='https://raw.githubusercontent.com/fmlyprod/fmlyprod/main/about.jpg';
 // Replace above line with your actual photo URL once uploaded to GitHub
 
 // VIDEO LIGHTBOX
@@ -879,7 +879,7 @@ function openModal(id){if(id==='modal-manage-accounts')renderManageAccounts();do
 function closeModal(id){document.getElementById(id).classList.remove('show');}
 document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show');}));
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-renderHomeGrid();populateLoginProjects();populateFilterDropdowns();
+try{renderHomeGrid();populateLoginProjects();populateFilterDropdowns();}catch(e){console.error('Init error:',e);}
 
 // ── STANDALONE STORYBOARD ANALYZER ──
 let azFile=null,azBase64=null;
