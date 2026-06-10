@@ -737,81 +737,66 @@ const CAST_CITY_IDS={'BARCELONA':'1RKEOpe0pJUBPkBub8gwTIvMhoIR5BbdG','MADRID':'1
 async function callAI(messages,useDrive=false){const body={model:'claude-sonnet-4-5',max_tokens:4000,messages};if(useDrive)body.mcp_servers=[{type:'url',url:'https://drivemcp.googleapis.com/mcp/v1',name:'google-drive'}];const res=await fetch('https://fmly-ai-proxy.fmlyprod.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const data=await res.json();if(data.error)throw new Error(data.error.message);return data.content.find(b=>b.type==='text')?.text||'';}
 // Get diverse photos from multiple matching folders (1-2 per folder)
 async function searchDriveForPhotos(locationType, regionId, region){
+  const DRIVE_API = 'https://script.google.com/macros/s/AKfycbymzPQ0UHKDGkRuLBLRcFiYAm-5v68eLBA7A7dKWvp-IchUjF66dnpxRxK-3BzjwtW3/exec';
+
+  // Map location type to folder ID
+  const loc = locationType.toLowerCase();
+  let folderId = '1vKyQakUarvZad18I0Cp0E6NESjwcKQzk'; // HOTELS MAD default
+
+  if(region === 'MADRID' || !region){
+    if(loc.includes('street')||loc.includes('urban')||loc.includes('city')||loc.includes('road')) folderId='1Oq9Jf6oyB_vMk2j_Y4Nzeaz5mpgDHoAU';
+    else if(loc.includes('park')||loc.includes('garden')||loc.includes('outdoor')||loc.includes('nature')) folderId='15xdD2zLRNX1tN6GnTbebS0VBcS96YCup';
+    else if(loc.includes('gallery')||loc.includes('art')||loc.includes('museum')) folderId='1fiaPEQdCV2eh5lk60g1h-zxZLrf8X7GQ';
+    else if(loc.includes('shop')||loc.includes('store')||loc.includes('retail')) folderId='1w7jaNBxgEwB12TvQ1yK4N9Rk706Nl407';
+    else if(loc.includes('supermarket')||loc.includes('grocery')||loc.includes('market')) folderId='1uVmqW4rG2q1_WgHRK4xarAzdyRtc_5SQ';
+    else if(loc.includes('fire')||loc.includes('industrial')||loc.includes('warehouse')) folderId='1PtWrytvNHpDdwDz62H10zBYKgI9JZ7NL';
+    else if(loc.includes('marquee')||loc.includes('tent')||loc.includes('event')||loc.includes('party')) folderId='1Xt1FgyfiE1m6uKfbo75CIqqxc_XdovBh';
+    else if(loc.includes('race')||loc.includes('track')||loc.includes('circuit')) folderId='17K64Amdixe4LaMsMoZy8K8LpJW51v3Yu';
+    else if(loc.includes('facade')||loc.includes('building')||loc.includes('exterior')) folderId='1h-gI8abi7Lq2CvN3AYhi-c2OvXWMxDx';
+    else folderId='1vKyQakUarvZad18I0Cp0E6NESjwcKQzk'; // HOTELS default
+  } else if(region === 'CAST'){
+    if(loc.includes('barcelona')) folderId='1RKEOpe0pJUBPkBub8gwTIvMhoIR5BbdG';
+    else folderId='1HvQDfytVfV1EX-ara5PEoBIepC3LENp6'; // CAST MADRID default
+  } else if(regionId){
+    folderId = regionId;
+  }
+
   try{
-    const SUBFOLDERS = {
-      'HOTELS': [
-        {name:'barcelo', id:'1Iczj3NsYPxIZXH_e9Uq9I5CIZPNlt1UF'},
-        {name:'HOTEL AMERICA', id:'12MrhsTt6CyjEN8y32dBo6Ay6Z-SdiWv5'},
-        {name:'Hotel Madrid 1', id:'13a_G_IRoqRfDsSmEs877ztWEzQGU_YDX'},
-        {name:'Hotel EXE CENTRAL', id:'1ntneacT0yv7JkocRwsQ0SihNHRrH-hB-'},
-        {name:'Hotel Osuna', id:'1S1j6O4u19fKAfnI7w-eWLEtUnVf-G9Jq'},
-        {name:'Hotel NH Ventas', id:'1O17SMeqlcjW7PqzCIojvsB7GwFd4pnFX'},
-        {name:'Emperador Hotel', id:'1wOC9JNEkzjhUHoVZMsxf5HJ1f5LLLNzm'},
-        {name:'HOTEL MERCURE', id:'1QYWBIyTcHr7oeD-gtSiyI_ydaQloqvVv'},
-        {name:'hotel Lobby', id:'1HJ4sx0F9o9_j-WS1-vCUvbDIYXzFjeB4'},
-        {name:'hotel entrance', id:'17Mb9ytCSDbpgC1Ll1ClceW9cTwPf2LnE'},
-        {name:'hotel restauran', id:'1bO16T52I4KO64diBLS4Zwp9-W-LSmyqV'},
-      ],
-      'STREETS': [{name:'STREETS MAD', id:'1Oq9Jf6oyB_vMk2j_Y4Nzeaz5mpgDHoAU'}],
-      'PARKS': [{name:'PARKS MAD', id:'15xdD2zLRNX1tN6GnTbebS0VBcS96YCup'}],
-      'GALLERY': [{name:'ART GALLERY MAD', id:'1fiaPEQdCV2eh5lk60g1h-zxZLrf8X7GQ'}],
-      'SHOPS': [{name:'SHOPS MAD', id:'1w7jaNBxgEwB12TvQ1yK4N9Rk706Nl407'}],
-      'SUPERMARKET': [{name:'SUPERMARKET MAD', id:'1uVmqW4rG2q1_WgHRK4xarAzdyRtc_5SQ'}],
-      'FIRE': [{name:'FIREBRIGADE MAD', id:'1PtWrytvNHpDdwDz62H10zBYKgI9JZ7NL'}],
-      'MARQUEE': [{name:'MARQUEE MAD', id:'1Xt1FgyfiE1m6uKfbo75CIqqxc_XdovBh'}],
-      'RACE': [{name:'RACETRACK MAD', id:'17K64Amdixe4LaMsMoZy8K8LpJW51v3Yu'}],
-      'FACADES': [{name:'FACADES MAD', id:'1h-gI8abi7Lq2CvN3AYhi-c2OvXWMxDx'}],
-    };
+    // First get subfolders for variety
+    const subRes = await fetch(`${DRIVE_API}?folderId=${folderId}&type=folders&limit=8`);
+    const subData = await subRes.json();
+    const subfolders = subData.photos || [];
 
-    const loc = locationType.toLowerCase();
-    let key = 'HOTELS';
-    if(loc.includes('street')||loc.includes('urban')||loc.includes('city')||loc.includes('road')) key='STREETS';
-    else if(loc.includes('park')||loc.includes('garden')||loc.includes('outdoor')||loc.includes('nature')) key='PARKS';
-    else if(loc.includes('gallery')||loc.includes('art')||loc.includes('museum')) key='GALLERY';
-    else if(loc.includes('shop')||loc.includes('store')||loc.includes('retail')) key='SHOPS';
-    else if(loc.includes('supermarket')||loc.includes('grocery')) key='SUPERMARKET';
-    else if(loc.includes('fire')||loc.includes('industrial')||loc.includes('warehouse')) key='FIRE';
-    else if(loc.includes('marquee')||loc.includes('tent')||loc.includes('event')) key='MARQUEE';
-    else if(loc.includes('race')||loc.includes('track')||loc.includes('circuit')) key='RACE';
-    else if(loc.includes('facade')||loc.includes('building')||loc.includes('exterior')) key='FACADES';
+    let allPhotos = [];
 
-    const subfolders = SUBFOLDERS[key];
-    const shuffled = [...subfolders].sort(()=>Math.random()-0.5).slice(0,5);
-    const allPhotos = [];
+    if(subfolders.length > 0){
+      // Get photos from random subfolders
+      const picks = subfolders.sort(()=>Math.random()-0.5).slice(0,5);
+      await Promise.all(picks.map(async sub => {
+        try{
+          const res = await fetch(`${DRIVE_API}?folderId=${sub.id}&limit=2`);
+          const data = await res.json();
+          if(data.photos) allPhotos.push(...data.photos.map(p=>({...p, folder:sub.name})));
+        } catch(e){}
+      }));
+    }
 
-    // Use Google Drive API directly via the AI proxy with MCP
-    await Promise.all(shuffled.map(async sub => {
-      try{
-        const resp = await fetch('https://fmly-ai-proxy.fmlyprod.workers.dev', {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({
-            model:'claude-sonnet-4-5',
-            max_tokens:500,
-            mcp_servers:[{type:'url',url:'https://drivemcp.googleapis.com/mcp/v1',name:'google-drive'}],
-            messages:[{role:'user',content:`Search Google Drive files. Use search_files with query: mimeType contains 'image/' and parentId = '${sub.id}'. Return ONLY a JSON array of the first 2 results: [{"id":"fileId","name":"filename"}]. No other text.`}]
-          })
-        });
-        const data = await resp.json();
-        const text = (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
-        const m = text.match(/\[[\s\S]*?\]/);
-        if(m){
-          const imgs = JSON.parse(m[0]);
-          imgs.slice(0,2).forEach(f=>{
-            if(f.id) allPhotos.push({
-              id:f.id, name:sub.name,
-              url:`https://drive.google.com/uc?id=${f.id}&export=view`,
-              folder:sub.name
-            });
-          });
-        }
-      } catch(e){ console.warn('subfolder failed:', sub.name, e); }
-    }));
+    // If no subfolders or not enough photos, get directly from folder
+    if(allPhotos.length < 4){
+      const res = await fetch(`${DRIVE_API}?folderId=${folderId}&limit=8`);
+      const data = await res.json();
+      if(data.photos) allPhotos.push(...data.photos);
+    }
 
-    const seen=new Set();
-    return allPhotos.filter(p=>{if(seen.has(p.id))return false;seen.add(p.id);return true;});
-  } catch(e){ console.warn('searchDriveForPhotos error:',e); return []; }
+    // Dedup and return
+    const seen = new Set();
+    return allPhotos.filter(p=>{if(seen.has(p.id))return false;seen.add(p.id);return true;}).slice(0,8);
+  } catch(e){
+    console.warn('Drive search failed:', e);
+    return [];
+  }
 }
+
 
 async function azAnalyze(){
   if(!azFile||!azBase64)return;
