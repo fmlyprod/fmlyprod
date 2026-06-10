@@ -739,139 +739,87 @@ async function callAI(messages,useDrive=false){const body={model:'claude-sonnet-
 // Get diverse photos from multiple matching folders (1-2 per folder)
 async function searchDriveForPhotos(locationType, regionId, region){
   try{
-    // Build folder description for AI to choose from
-    const FOLDER_MAP = {
-      'MADRID':{
-        id:'1N1rMt6L1trB6GfYYIM0YPBxcRrPuwSon',
-        subfolders:{
-          'STREETS MAD':'1Oq9Jf6oyB_vMk2j_Y4Nzeaz5mpgDHoAU',
-          'ART GALLERY MAD':'1fiaPEQdCV2eh5lk60g1h-zxZLrf8X7GQ',
-          'FIREBRIGADE MAD':'1PtWrytvNHpDdwDz62H10zBYKgI9JZ7NL',
-          'PARKS MAD':'15xdD2zLRNX1tN6GnTbebS0VBcS96YCup',
-          'HOTELS MAD':'1vKyQakUarvZad18I0Cp0E6NESjwcKQzk',
-          'FACADES MAD':'1h-gI8abi7Lq2CvN3AYhi-c2OvXWMxDx',
-          'MARQUEE MAD':'1Xt1FgyfiE1m6uKfbo75CIqqxc_XdovBh',
-          'SUPERMARKET MAD':'1uVmqW4rG2q1_WgHRK4xarAzdyRtc_5SQ',
-          'RACETRACK MAD':'17K64Amdixe4LaMsMoZy8K8LpJW51v3Yu',
-          'SHOPS MAD':'1w7jaNBxgEwB12TvQ1yK4N9Rk706Nl407'
-        }
-      },
-      'CAST':{
-        id:'12MSryt1CaVikRrDziS9Eb9NBdu1LyL6S',
-        subfolders:{
-          'CAST BARCELONA':'1RKEOpe0pJUBPkBub8gwTIvMhoIR5BbdG',
-          'CAST MADRID':'1HvQDfytVfV1EX-ara5PEoBIepC3LENp6',
-          'CAST MALAGA':'1lvy_qn4yqLpmvBIqTNBPvbMvpef_H84k',
-          'CAST ALMERIA':'1gq_l8J5oTn6GIPJkfaEbQMM2l43hTvt9'
-        }
-      }
+    // Hardcoded subfolder IDs for instant access (no Drive browsing needed)
+    const SUBFOLDERS = {
+      'MADRID_HOTELS': [
+        {name:'barcelo', id:'1Iczj3NsYPxIZXH_e9Uq9I5CIZPNlt1UF'},
+        {name:'HOTEL AMERICA', id:'12MrhsTt6CyjEN8y32dBo6Ay6Z-SdiWv5'},
+        {name:'Hotel Madrid 1', id:'13a_G_IRoqRfDsSmEs877ztWEzQGU_YDX'},
+        {name:'Hotel EXE CENTRAL', id:'1ntneacT0yv7JkocRwsQ0SihNHRrH-hB-'},
+        {name:'Hotel Osuna', id:'1S1j6O4u19fKAfnI7w-eWLEtUnVf-G9Jq'},
+        {name:'Hotel NH Ventas', id:'1O17SMeqlcjW7PqzCIojvsB7GwFd4pnFX'},
+        {name:'Emperador Hotel', id:'1wOC9JNEkzjhUHoVZMsxf5HJ1f5LLLNzm'},
+        {name:'HOTEL MERCURE', id:'1QYWBIyTcHr7oeD-gtSiyI_ydaQloqvVv'},
+        {name:'hotel Lobby', id:'1HJ4sx0F9o9_j-WS1-vCUvbDIYXzFjeB4'},
+        {name:'hotel entrance', id:'17Mb9ytCSDbpgC1Ll1ClceW9cTwPf2LnE'},
+        {name:'hotel restauran', id:'1bO16T52I4KO64diBLS4Zwp9-W-LSmyqV'},
+      ],
+      'MADRID_STREETS': [{name:'STREETS MAD', id:'1Oq9Jf6oyB_vMk2j_Y4Nzeaz5mpgDHoAU'}],
+      'MADRID_PARKS': [{name:'PARKS MAD', id:'15xdD2zLRNX1tN6GnTbebS0VBcS96YCup'}],
+      'MADRID_GALLERY': [{name:'ART GALLERY MAD', id:'1fiaPEQdCV2eh5lk60g1h-zxZLrf8X7GQ'}],
+      'MADRID_SHOPS': [{name:'SHOPS MAD', id:'1w7jaNBxgEwB12TvQ1yK4N9Rk706Nl407'}],
+      'MADRID_SUPERMARKET': [{name:'SUPERMARKET MAD', id:'1uVmqW4rG2q1_WgHRK4xarAzdyRtc_5SQ'}],
+      'MADRID_FIRE': [{name:'FIREBRIGADE MAD', id:'1PtWrytvNHpDdwDz62H10zBYKgI9JZ7NL'}],
+      'MADRID_MARQUEE': [{name:'MARQUEE MAD', id:'1Xt1FgyfiE1m6uKfbo75CIqqxc_XdovBh'}],
+      'MADRID_RACE': [{name:'RACETRACK MAD', id:'17K64Amdixe4LaMsMoZy8K8LpJW51v3Yu'}],
+      'MADRID_FACADES': [{name:'FACADES MAD', id:'1h-gI8abi7Lq2CvN3AYhi-c2OvXWMxDx'}],
     };
 
-    // Step 1: Ask AI to pick the best folder based on scene description
-    const folderList = Object.entries(FOLDER_MAP).map(([region, data]) =>
-      Object.entries(data.subfolders).map(([name, id]) => `${name} (id:${id})`).join(', ')
-    ).join('; ');
+    // Match location type to subfolder set
+    const loc = locationType.toLowerCase();
+    let subfolders = [];
 
-    const pickText = await callAI([{role:'user',content:`Given this location type needed: "${locationType}", which folder IDs from this list best match? Pick 1-3 most relevant folder IDs.
-
-Available folders: ${folderList}
-
-Return ONLY a JSON array of folder IDs: ["id1","id2"]. No explanation.`}]);
-
-    let folderIds = [];
-    try {
-      const m = pickText.match(/\[["\s\w,\-_]+\]/);
-      if(m) folderIds = JSON.parse(m[0]);
-    } catch(e){}
-
-    // Fallback: use region folder directly
-    if(!folderIds.length) {
-      const regionData = FOLDER_MAP[region];
-      folderIds = regionData ? [regionData.id] : [MYLIO_ID];
+    if(loc.includes('hotel') || loc.includes('conference') || loc.includes('meeting') || loc.includes('office') || loc.includes('corporate') || loc.includes('lobby') || loc.includes('room') || loc.includes('presentation') || loc.includes('interior') || loc.includes('modern') || loc.includes('ballroom') || loc.includes('reception')){
+      subfolders = SUBFOLDERS.MADRID_HOTELS;
+    } else if(loc.includes('street') || loc.includes('urban') || loc.includes('city') || loc.includes('road') || loc.includes('pavement') || loc.includes('sidewalk')){
+      subfolders = SUBFOLDERS.MADRID_STREETS;
+    } else if(loc.includes('park') || loc.includes('garden') || loc.includes('outdoor') || loc.includes('nature') || loc.includes('green') || loc.includes('trees')){
+      subfolders = SUBFOLDERS.MADRID_PARKS;
+    } else if(loc.includes('gallery') || loc.includes('art') || loc.includes('museum') || loc.includes('exhibition') || loc.includes('creative')){
+      subfolders = SUBFOLDERS.MADRID_GALLERY;
+    } else if(loc.includes('shop') || loc.includes('store') || loc.includes('retail') || loc.includes('boutique') || loc.includes('commercial')){
+      subfolders = SUBFOLDERS.MADRID_SHOPS;
+    } else if(loc.includes('supermarket') || loc.includes('grocery') || loc.includes('market')){
+      subfolders = SUBFOLDERS.MADRID_SUPERMARKET;
+    } else if(loc.includes('fire') || loc.includes('industrial') || loc.includes('warehouse') || loc.includes('garage')){
+      subfolders = SUBFOLDERS.MADRID_FIRE;
+    } else if(loc.includes('marquee') || loc.includes('tent') || loc.includes('event') || loc.includes('party') || loc.includes('wedding')){
+      subfolders = SUBFOLDERS.MADRID_MARQUEE;
+    } else if(loc.includes('race') || loc.includes('track') || loc.includes('circuit') || loc.includes('sport')){
+      subfolders = SUBFOLDERS.MADRID_RACE;
+    } else if(loc.includes('facade') || loc.includes('building') || loc.includes('exterior') || loc.includes('entrance') || loc.includes('architecture')){
+      subfolders = SUBFOLDERS.MADRID_FACADES;
+    } else {
+      // Default: hotels (most versatile for corporate/interior scenes)
+      subfolders = SUBFOLDERS.MADRID_HOTELS;
     }
 
-    // Step 2: For each selected folder, get subfolders then sample images
+    // Fetch 1-2 images from each subfolder for diversity
     const allPhotos = [];
-    await Promise.all(folderIds.slice(0,3).map(async folderId => {
-      try {
-        // Get subfolders (individual properties/locations)
-        const subText = await callAI([{role:'user',content:`Use Google Drive search_files MCP tool. Query: mimeType = 'application/vnd.google-apps.folder' and parentId = '${folderId}'. Return ONLY JSON array max 8: [{"id":"id","name":"name"}]. Return [] if none.`}], true);
-        const subMatch = subText.match(/\[[\s\S]*?\]/);
-        const subfolders = subMatch ? JSON.parse(subMatch[0]) : [];
-
-        if(subfolders.length > 0){
-          // Get 1-2 images from each subfolder for variety
-          await Promise.all(subfolders.slice(0,5).map(async sub => {
-            try {
-              const imgText = await callAI([{role:'user',content:`Use Google Drive search_files MCP tool. Query: mimeType contains 'image/' and parentId = '${sub.id}'. Return ONLY JSON array first 2: [{"id":"id","name":"name"}]. Return [] if none.`}], true);
-              const imgMatch = imgText.match(/\[[\s\S]*?\]/);
-              if(imgMatch){
-                JSON.parse(imgMatch[0]).slice(0,2).forEach(f => {
-                  allPhotos.push({id:f.id, name:sub.name, url:`https://drive.google.com/uc?id=${f.id}&export=view`, folder:sub.name});
-                });
-              }
-            } catch(e){}
-          }));
-        } else {
-          // No subfolders - get images directly from folder
-          const imgText = await callAI([{role:'user',content:`Use Google Drive search_files MCP tool. Query: mimeType contains 'image/' and parentId = '${folderId}'. Return ONLY JSON array first 6: [{"id":"id","name":"name"}]. Return [] if none.`}], true);
-          const imgMatch = imgText.match(/\[[\s\S]*?\]/);
-          if(imgMatch){
-            JSON.parse(imgMatch[0]).slice(0,6).forEach(f => {
-              allPhotos.push({id:f.id, name:f.name||locationType, url:`https://drive.google.com/uc?id=${f.id}&export=view`, folder:locationType});
+    const shuffled = subfolders.sort(() => Math.random() - 0.5).slice(0, 5);
+    
+    await Promise.all(shuffled.map(async sub => {
+      try{
+        const imgText = await callAI([{role:'user', content:`Use Google Drive search_files MCP tool. Query: mimeType contains 'image/' and parentId = '${sub.id}'. Return ONLY JSON array first 3 results: [{"id":"fileId","name":"filename"}]. Return [] if none.`}], true);
+        const m = imgText.match(/\[[\s\S]*?\]/);
+        if(m){
+          const imgs = JSON.parse(m[0]);
+          imgs.slice(0,2).forEach(f => {
+            allPhotos.push({
+              id: f.id,
+              name: sub.name,
+              url: `https://drive.google.com/uc?id=${f.id}&export=view`,
+              folder: sub.name
             });
-          }
+          });
         }
-      } catch(e){ console.warn('Folder fetch failed:', folderId, e); }
+      } catch(e){ console.warn('Failed for subfolder:', sub.name, e); }
     }));
 
     // Dedup and return
     const seen = new Set();
-    return allPhotos.filter(p => { if(seen.has(p.id)) return false; seen.add(p.id); return true; }).slice(0,8);
+    return allPhotos.filter(p => { if(seen.has(p.id)) return false; seen.add(p.id); return true; });
   } catch(e){ console.warn('searchDriveForPhotos error:', e); return []; }
-}
-
-
-
-let azFile=null,azBase64=null;
-function azHandleFile(file){
-  if(!file)return;
-  azFile=file;
-  const reader=new FileReader();
-  reader.onload=ev=>{
-    azBase64=ev.target.result.split(',')[1];
-    document.getElementById('az-fname').textContent=file.name;
-    document.getElementById('az-fsize').textContent=(file.size/1024/1024).toFixed(2)+' MB';
-    document.getElementById('az-file-chosen').style.display='flex';
-    const btn=document.getElementById('az-btn');
-    btn.disabled=false;btn.style.opacity='1';
-  };
-  reader.readAsDataURL(file);
-}
-function azHandleDrop(e){e.preventDefault();const f=e.dataTransfer.files[0];if(f)azHandleFile(f);}
-function azReset(){
-  azFile=null;azBase64=null;
-  document.getElementById('az-file-chosen').style.display='none';
-  document.getElementById('az-file-input').value='';
-  const btn=document.getElementById('az-btn');btn.disabled=true;btn.style.opacity='0.35';
-  document.getElementById('az-status').textContent='';
-  document.getElementById('az-empty').style.display='flex';
-  document.getElementById('az-loading').style.display='none';
-  document.getElementById('az-scenes').style.display='none';
-}
-
-
-function repairJSON(str){
-  const m=str.match(/\[[\s\S]*\]/);
-  if(!m)return null;
-  let s=m[0];
-  s=s.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g,' ');
-  s=s.replace(/,(\s*[}\]])/g,'$1');
-  try{return JSON.parse(s);}catch(e){
-    const lastBrace=s.lastIndexOf('},');
-    if(lastBrace>10){try{return JSON.parse(s.slice(0,lastBrace+1)+']');}catch(e2){}}
-    return null;
-  }
 }
 
 async function azAnalyze(){
