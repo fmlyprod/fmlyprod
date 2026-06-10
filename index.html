@@ -293,9 +293,9 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
 /* ── MOBILE ── */
 @media(max-width:768px){
   /* NAV */
-  nav#site-nav{padding:10px 16px;height:auto;flex-wrap:nowrap;align-items:center;}
-  .nav-logo img{height:28px!important;width:auto!important;}
-  .nav-links{gap:14px;flex-wrap:nowrap;}
+  nav#site-nav{padding:10px 16px;height:auto;flex-wrap:nowrap;align-items:center;justify-content:space-between;gap:0;}
+  .nav-logo img{height:28px!important;width:auto!important;margin-right:12px;}
+  .nav-links{gap:16px;flex-wrap:nowrap;margin-left:auto;}
   .nav-links a{font-size:8px;letter-spacing:.08em;}
   #nav-backend{display:none!important;}
   #nav-hamburger{display:none!important;}
@@ -738,9 +738,8 @@ async function callAI(messages,useDrive=false){const body={model:'claude-sonnet-
 // Get diverse photos from multiple matching folders (1-2 per folder)
 async function searchDriveForPhotos(locationType, regionId, region){
   try{
-    // Hardcoded subfolder IDs for instant access (no Drive browsing needed)
     const SUBFOLDERS = {
-      'MADRID_HOTELS': [
+      'HOTELS': [
         {name:'barcelo', id:'1Iczj3NsYPxIZXH_e9Uq9I5CIZPNlt1UF'},
         {name:'HOTEL AMERICA', id:'12MrhsTt6CyjEN8y32dBo6Ay6Z-SdiWv5'},
         {name:'Hotel Madrid 1', id:'13a_G_IRoqRfDsSmEs877ztWEzQGU_YDX'},
@@ -753,72 +752,65 @@ async function searchDriveForPhotos(locationType, regionId, region){
         {name:'hotel entrance', id:'17Mb9ytCSDbpgC1Ll1ClceW9cTwPf2LnE'},
         {name:'hotel restauran', id:'1bO16T52I4KO64diBLS4Zwp9-W-LSmyqV'},
       ],
-      'MADRID_STREETS': [{name:'STREETS MAD', id:'1Oq9Jf6oyB_vMk2j_Y4Nzeaz5mpgDHoAU'}],
-      'MADRID_PARKS': [{name:'PARKS MAD', id:'15xdD2zLRNX1tN6GnTbebS0VBcS96YCup'}],
-      'MADRID_GALLERY': [{name:'ART GALLERY MAD', id:'1fiaPEQdCV2eh5lk60g1h-zxZLrf8X7GQ'}],
-      'MADRID_SHOPS': [{name:'SHOPS MAD', id:'1w7jaNBxgEwB12TvQ1yK4N9Rk706Nl407'}],
-      'MADRID_SUPERMARKET': [{name:'SUPERMARKET MAD', id:'1uVmqW4rG2q1_WgHRK4xarAzdyRtc_5SQ'}],
-      'MADRID_FIRE': [{name:'FIREBRIGADE MAD', id:'1PtWrytvNHpDdwDz62H10zBYKgI9JZ7NL'}],
-      'MADRID_MARQUEE': [{name:'MARQUEE MAD', id:'1Xt1FgyfiE1m6uKfbo75CIqqxc_XdovBh'}],
-      'MADRID_RACE': [{name:'RACETRACK MAD', id:'17K64Amdixe4LaMsMoZy8K8LpJW51v3Yu'}],
-      'MADRID_FACADES': [{name:'FACADES MAD', id:'1h-gI8abi7Lq2CvN3AYhi-c2OvXWMxDx'}],
+      'STREETS': [{name:'STREETS MAD', id:'1Oq9Jf6oyB_vMk2j_Y4Nzeaz5mpgDHoAU'}],
+      'PARKS': [{name:'PARKS MAD', id:'15xdD2zLRNX1tN6GnTbebS0VBcS96YCup'}],
+      'GALLERY': [{name:'ART GALLERY MAD', id:'1fiaPEQdCV2eh5lk60g1h-zxZLrf8X7GQ'}],
+      'SHOPS': [{name:'SHOPS MAD', id:'1w7jaNBxgEwB12TvQ1yK4N9Rk706Nl407'}],
+      'SUPERMARKET': [{name:'SUPERMARKET MAD', id:'1uVmqW4rG2q1_WgHRK4xarAzdyRtc_5SQ'}],
+      'FIRE': [{name:'FIREBRIGADE MAD', id:'1PtWrytvNHpDdwDz62H10zBYKgI9JZ7NL'}],
+      'MARQUEE': [{name:'MARQUEE MAD', id:'1Xt1FgyfiE1m6uKfbo75CIqqxc_XdovBh'}],
+      'RACE': [{name:'RACETRACK MAD', id:'17K64Amdixe4LaMsMoZy8K8LpJW51v3Yu'}],
+      'FACADES': [{name:'FACADES MAD', id:'1h-gI8abi7Lq2CvN3AYhi-c2OvXWMxDx'}],
     };
 
-    // Match location type to subfolder set
     const loc = locationType.toLowerCase();
-    let subfolders = [];
+    let key = 'HOTELS';
+    if(loc.includes('street')||loc.includes('urban')||loc.includes('city')||loc.includes('road')) key='STREETS';
+    else if(loc.includes('park')||loc.includes('garden')||loc.includes('outdoor')||loc.includes('nature')) key='PARKS';
+    else if(loc.includes('gallery')||loc.includes('art')||loc.includes('museum')) key='GALLERY';
+    else if(loc.includes('shop')||loc.includes('store')||loc.includes('retail')) key='SHOPS';
+    else if(loc.includes('supermarket')||loc.includes('grocery')) key='SUPERMARKET';
+    else if(loc.includes('fire')||loc.includes('industrial')||loc.includes('warehouse')) key='FIRE';
+    else if(loc.includes('marquee')||loc.includes('tent')||loc.includes('event')) key='MARQUEE';
+    else if(loc.includes('race')||loc.includes('track')||loc.includes('circuit')) key='RACE';
+    else if(loc.includes('facade')||loc.includes('building')||loc.includes('exterior')) key='FACADES';
 
-    if(loc.includes('hotel') || loc.includes('conference') || loc.includes('meeting') || loc.includes('office') || loc.includes('corporate') || loc.includes('lobby') || loc.includes('room') || loc.includes('presentation') || loc.includes('interior') || loc.includes('modern') || loc.includes('ballroom') || loc.includes('reception')){
-      subfolders = SUBFOLDERS.MADRID_HOTELS;
-    } else if(loc.includes('street') || loc.includes('urban') || loc.includes('city') || loc.includes('road') || loc.includes('pavement') || loc.includes('sidewalk')){
-      subfolders = SUBFOLDERS.MADRID_STREETS;
-    } else if(loc.includes('park') || loc.includes('garden') || loc.includes('outdoor') || loc.includes('nature') || loc.includes('green') || loc.includes('trees')){
-      subfolders = SUBFOLDERS.MADRID_PARKS;
-    } else if(loc.includes('gallery') || loc.includes('art') || loc.includes('museum') || loc.includes('exhibition') || loc.includes('creative')){
-      subfolders = SUBFOLDERS.MADRID_GALLERY;
-    } else if(loc.includes('shop') || loc.includes('store') || loc.includes('retail') || loc.includes('boutique') || loc.includes('commercial')){
-      subfolders = SUBFOLDERS.MADRID_SHOPS;
-    } else if(loc.includes('supermarket') || loc.includes('grocery') || loc.includes('market')){
-      subfolders = SUBFOLDERS.MADRID_SUPERMARKET;
-    } else if(loc.includes('fire') || loc.includes('industrial') || loc.includes('warehouse') || loc.includes('garage')){
-      subfolders = SUBFOLDERS.MADRID_FIRE;
-    } else if(loc.includes('marquee') || loc.includes('tent') || loc.includes('event') || loc.includes('party') || loc.includes('wedding')){
-      subfolders = SUBFOLDERS.MADRID_MARQUEE;
-    } else if(loc.includes('race') || loc.includes('track') || loc.includes('circuit') || loc.includes('sport')){
-      subfolders = SUBFOLDERS.MADRID_RACE;
-    } else if(loc.includes('facade') || loc.includes('building') || loc.includes('exterior') || loc.includes('entrance') || loc.includes('architecture')){
-      subfolders = SUBFOLDERS.MADRID_FACADES;
-    } else {
-      // Default: hotels (most versatile for corporate/interior scenes)
-      subfolders = SUBFOLDERS.MADRID_HOTELS;
-    }
-
-    // Fetch 1-2 images from each subfolder for diversity
+    const subfolders = SUBFOLDERS[key];
+    const shuffled = [...subfolders].sort(()=>Math.random()-0.5).slice(0,5);
     const allPhotos = [];
-    const shuffled = subfolders.sort(() => Math.random() - 0.5).slice(0, 5);
-    
+
+    // Use Google Drive API directly via the AI proxy with MCP
     await Promise.all(shuffled.map(async sub => {
       try{
-        const imgText = await callAI([{role:'user', content:`Use Google Drive search_files MCP tool. Query: mimeType contains 'image/' and parentId = '${sub.id}'. Return ONLY JSON array first 3 results: [{"id":"fileId","name":"filename"}]. Return [] if none.`}], true);
-        const m = imgText.match(/\[[\s\S]*?\]/);
+        const resp = await fetch('https://fmly-ai-proxy.fmlyprod.workers.dev', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({
+            model:'claude-sonnet-4-5',
+            max_tokens:500,
+            mcp_servers:[{type:'url',url:'https://drivemcp.googleapis.com/mcp/v1',name:'google-drive'}],
+            messages:[{role:'user',content:`Search Google Drive files. Use search_files with query: mimeType contains 'image/' and parentId = '${sub.id}'. Return ONLY a JSON array of the first 2 results: [{"id":"fileId","name":"filename"}]. No other text.`}]
+          })
+        });
+        const data = await resp.json();
+        const text = (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
+        const m = text.match(/\[[\s\S]*?\]/);
         if(m){
           const imgs = JSON.parse(m[0]);
-          imgs.slice(0,2).forEach(f => {
-            allPhotos.push({
-              id: f.id,
-              name: sub.name,
-              url: `https://drive.google.com/uc?id=${f.id}&export=view`,
-              folder: sub.name
+          imgs.slice(0,2).forEach(f=>{
+            if(f.id) allPhotos.push({
+              id:f.id, name:sub.name,
+              url:`https://drive.google.com/uc?id=${f.id}&export=view`,
+              folder:sub.name
             });
           });
         }
-      } catch(e){ console.warn('Failed for subfolder:', sub.name, e); }
+      } catch(e){ console.warn('subfolder failed:', sub.name, e); }
     }));
 
-    // Dedup and return
-    const seen = new Set();
-    return allPhotos.filter(p => { if(seen.has(p.id)) return false; seen.add(p.id); return true; });
-  } catch(e){ console.warn('searchDriveForPhotos error:', e); return []; }
+    const seen=new Set();
+    return allPhotos.filter(p=>{if(seen.has(p.id))return false;seen.add(p.id);return true;});
+  } catch(e){ console.warn('searchDriveForPhotos error:',e); return []; }
 }
 
 async function azAnalyze(){
