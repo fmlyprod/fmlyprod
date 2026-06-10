@@ -737,7 +737,7 @@ const CAST_CITY_IDS={'BARCELONA':'1RKEOpe0pJUBPkBub8gwTIvMhoIR5BbdG','MADRID':'1
 async function callAI(messages,useDrive=false){const body={model:'claude-sonnet-4-5',max_tokens:4000,messages};if(useDrive)body.mcp_servers=[{type:'url',url:'https://drivemcp.googleapis.com/mcp/v1',name:'google-drive'}];const res=await fetch('https://fmly-ai-proxy.fmlyprod.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const data=await res.json();if(data.error)throw new Error(data.error.message);return data.content.find(b=>b.type==='text')?.text||'';}
 // Get diverse photos from multiple matching folders (1-2 per folder)
 async function searchDriveForPhotos(locationType, regionId, region){
-  const DRIVE_API = 'https://script.google.com/macros/s/AKfycbymzPQ0UHKDGkRuLBLRcFiYAm-5v68eLBA7A7dKWvp-IchUjF66dnpxRxK-3BzjwtW3/exec';
+  const DRIVE_API = 'https://script.google.com/macros/s/AKfycbye4_Q42KRJOV4jxRMneY86wNH3fSRMLEC6WYGf8RqkTjZmqtqv3VIKr_eIj0FJiNmJ/exec';
 
   // Map location type to folder ID
   const loc = locationType.toLowerCase();
