@@ -531,8 +531,8 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
           <div style="display:flex;flex-direction:column;gap:18px;">
             <div>
               <div style="font-size:9px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">01 — Upload Storyboard</div>
-              <div style="border:1px dashed rgba(255,255,255,0.15);border-radius:4px;padding:24px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;position:relative;cursor:pointer;" ondragover="event.preventDefault()" ondrop="azHandleDrop(event)">
-                <input type="file" id="az-file-input" accept=".pdf,image/*" onchange="azHandleFile(this.files[0])" style="position:absolute;inset:0;opacity:0;cursor:pointer;">
+              <div style="border:1px dashed rgba(255,255,255,0.15);border-radius:4px;padding:24px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;position:relative;cursor:pointer;" ondragover="event.preventDefault()" ondrop="azHandleDrop(event)" onclick="document.getElementById('az-file-input').click()">
+                <input type="file" id="az-file-input" accept=".pdf,image/*" onchange="azHandleFile(this.files[0])" style="display:none;">
                 <div style="font-size:24px;opacity:0.4;">⬆</div>
                 <div style="font-size:10px;color:var(--muted);line-height:1.5;"><strong style="color:var(--text);display:block;margin-bottom:3px;">Drop Storyboard Here</strong>PDF or Image</div>
               </div>
