@@ -25,7 +25,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:cen
 .hero-pre{font-size:10px;letter-spacing:.35em;color:var(--muted);text-transform:uppercase;margin-bottom:20px;}
 .hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(100px,16vw,180px);letter-spacing:.06em;line-height:.85;color:var(--text);}
 .hero-title span{font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:clamp(60px,10vw,120px);color:var(--accent);letter-spacing:.02em;display:block;}
-.hero-tagline{margin-top:28px;font-size:10px;letter-spacing:.25em;color:var(--muted);text-transform:uppercase;}
+.hero-tagline{margin-top:28px;font-size:10px;letter-spacing:.25em;color:rgba(240,235,225,0.7);text-transform:uppercase;}
 .hero-scroll{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--dim);font-size:9px;letter-spacing:.2em;text-transform:uppercase;}
 .scroll-line{width:1px;height:36px;background:linear-gradient(to bottom,var(--dim),transparent);animation:sp 2s ease-in-out infinite;}
 @keyframes sp{0%,100%{opacity:.3}50%{opacity:1}}
@@ -597,23 +597,23 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
 <script>
 const db={filmProjects:[
 {id:'f1',client:'Aeterna',director:'Cayetano Gonzalez',ytId:'kFmegRIe1tg',driveId:'1erFnF1IGitqcUYTjeH-BjZ-eSCdhdpV4',logo:'AETERNA',logoUrl:'',sub:'Brand Film · 2024'},
-{id:'f0',client:'iPhone 15 Pro',director:'Craig Gillespie',vimeoId:'915193224',driveId:'18oigdrgpdAcORyp9UBbmapksImzg6PWr',logo:'APPLE',logoUrl:'https://logo.clearbit.com/apple.com',sub:'iPhone 15 Pro · 2024'},
-{id:'f2',client:'Minute Maid',director:'Fredrik Bond',ytId:'_VE7nrvM0pY',driveId:'1Ej4v_K_XeOU9PtuhvXdFTXHLUO_VbsSG',customThumb:'/thumb_minutemaid.jpg',logo:'MINUTE MAID',logoUrl:'https://logo.clearbit.com/minutemaid.com',sub:'Commercial · 2024'},
-{id:'f3',client:'HP — Future of Work',director:'Craig Gillespie',ytId:'q488JYbMz5I',driveId:'1dlXrb1yBaGZOB3_H-AQJb5vqoyyLLNd_',customThumb:'/thumb_hp1.jpg',logo:'HP',logoUrl:'https://logo.clearbit.com/hp.com',sub:'Commercial · 2024'},
-{id:'f4',client:'HP — Future of Freelance',director:'Craig Gillespie',ytId:'4D-OufVYics',driveId:'1NgbHlTPi-mbRIYo-bQMZDep7MywJmjCg',customThumb:'/thumb_hp2.jpg',logo:'HP',logoUrl:'https://logo.clearbit.com/hp.com',sub:'Commercial · 2024'},
-{id:'f5',client:'HP — Future of Endpoint Security',director:'Craig Gillespie',ytId:'G3CXyGdfPNg',driveId:'1FLhHWu_iOJFfEax2fNtYROZ7FDpiR7_D',customThumb:'/thumb_hp3.jpg',logo:'HP',logoUrl:'https://logo.clearbit.com/hp.com',sub:'Commercial · 2024'},
-{id:'f6',client:'Jack & Coke — Phones',director:'Jake Nava',ytId:'uBNc2n3v7cw',driveId:'1POi0S3OxRTrXmxUzX4i9Kev8cVkFP3ny',customThumb:'/thumb_jc1.jpg',logo:'JACK & COKE',logoUrl:'https://logo.clearbit.com/jackdaniels.com',sub:'Music Video · 2025'},
-{id:'f7',client:'Jack & Coke — Formal',director:'Jake Nava',ytId:'tTiH5_5jqVg',driveId:'1owhhRfWpmN6FrQJVKt-MXYniIAlDx6T6',customThumb:'/thumb_jc2.jpg',logo:'JACK & COKE',logoUrl:'https://logo.clearbit.com/jackdaniels.com',sub:'Music Video · 2025'},
-{id:'f8',client:'Jack & Coke — Dominoes',director:'Jake Nava',ytId:'rrhdJRYdiwo',driveId:'1tw1k0NjKnXd2laiEFARm0ipBTNK5ALhV',customThumb:'/thumb_jc3.jpg',logo:'JACK & COKE',logoUrl:'https://logo.clearbit.com/jackdaniels.com',sub:'Music Video · 2025'},
-{id:'f9',client:'Scholl',director:'Brad Lupin',ytId:'IVksgWNzPw0',driveId:'1g-KQ1-0x8uSy6kEBdH7rp1jVoXdfmOba',logo:'SCHOLL',logoUrl:'https://logo.clearbit.com/scholl.com',sub:'Commercial · 2024'},
-{id:'f10',client:'Scotch-Brite',director:'Ezra Hurwitz',ytId:'ialCbSW4cqg',driveId:'1BVWSfMvPO4GJj76iFarGTI3jX-UtnNE6',logo:'SCOTCH-BRITE',logoUrl:'https://logo.clearbit.com/scotch-brite.com',sub:'Commercial · 2024'},
+{id:'f0',client:'iPhone 15 Pro',director:'Craig Gillespie',vimeoId:'915193224',driveId:'18oigdrgpdAcORyp9UBbmapksImzg6PWr',logo:'APPLE',logoUrl:'',sub:'iPhone 15 Pro · 2024'},
+{id:'f2',client:'Minute Maid',director:'Fredrik Bond',ytId:'_VE7nrvM0pY',driveId:'1Ej4v_K_XeOU9PtuhvXdFTXHLUO_VbsSG',customThumb:'/thumb_minutemaid.jpg',logo:'MINUTE MAID',logoUrl:'',sub:'Commercial · 2024'},
+{id:'f3',client:'HP — Future of Work',director:'Craig Gillespie',ytId:'q488JYbMz5I',driveId:'1dlXrb1yBaGZOB3_H-AQJb5vqoyyLLNd_',customThumb:'/thumb_hp1.jpg',logo:'HP',logoUrl:'',sub:'Commercial · 2024'},
+{id:'f4',client:'HP — Future of Freelance',director:'Craig Gillespie',ytId:'4D-OufVYics',driveId:'1NgbHlTPi-mbRIYo-bQMZDep7MywJmjCg',customThumb:'/thumb_hp2.jpg',logo:'HP',logoUrl:'',sub:'Commercial · 2024'},
+{id:'f5',client:'HP — Future of Endpoint Security',director:'Craig Gillespie',ytId:'G3CXyGdfPNg',driveId:'1FLhHWu_iOJFfEax2fNtYROZ7FDpiR7_D',customThumb:'/thumb_hp3.jpg',logo:'HP',logoUrl:'',sub:'Commercial · 2024'},
+{id:'f6',client:'Jack & Coke — Phones',director:'Jake Nava',ytId:'uBNc2n3v7cw',driveId:'1POi0S3OxRTrXmxUzX4i9Kev8cVkFP3ny',customThumb:'/thumb_jc1.jpg',logo:'JACK & COKE',logoUrl:'',sub:'Music Video · 2025'},
+{id:'f7',client:'Jack & Coke — Formal',director:'Jake Nava',ytId:'tTiH5_5jqVg',driveId:'1owhhRfWpmN6FrQJVKt-MXYniIAlDx6T6',customThumb:'/thumb_jc2.jpg',logo:'JACK & COKE',logoUrl:'',sub:'Music Video · 2025'},
+{id:'f8',client:'Jack & Coke — Dominoes',director:'Jake Nava',ytId:'rrhdJRYdiwo',driveId:'1tw1k0NjKnXd2laiEFARm0ipBTNK5ALhV',customThumb:'/thumb_jc3.jpg',logo:'JACK & COKE',logoUrl:'',sub:'Music Video · 2025'},
+{id:'f9',client:'Scholl',director:'Brad Lupin',ytId:'IVksgWNzPw0',driveId:'1g-KQ1-0x8uSy6kEBdH7rp1jVoXdfmOba',logo:'SCHOLL',logoUrl:'',sub:'Commercial · 2024'},
+{id:'f10',client:'Scotch-Brite',director:'Ezra Hurwitz',ytId:'ialCbSW4cqg',driveId:'1BVWSfMvPO4GJj76iFarGTI3jX-UtnNE6',logo:'SCOTCH-BRITE',logoUrl:'',sub:'Commercial · 2024'},
 {id:'f11',client:'Tremfya',director:'JJ Augustavo',ytId:'uWzs9xW5tcc',driveId:'1w4qd0b7w5ZfQE-eXiMzTEQ_x4mcqwozW',logo:'TREMFYA',logoUrl:'',sub:'Healthcare · 2025'},
 {id:'f12',client:'Cabenuva',director:'Michael Marantz',ytId:'iTtvfqzXN4o',driveId:'1ekHMt8g_u_-lUaHYFVRGy_tdjxjveCGR',logo:'CABENUVA',logoUrl:'',sub:'Healthcare · 2024'},
 {id:'f13',client:'Zepbound',director:'Chris Wilcha',ytId:'alicincMkkA',driveId:'1vWmkR4qe6_353KcvgSFiYJdBoPaVSnDZ',logo:'ZEPBOUND',logoUrl:'',sub:'Commercial · 2025'},
 {id:'f14',client:'Sugarmami',director:'Isabel de Fortuny',ytId:'1z3suv86e54',driveId:'1vCeLUw2W5lad_4DUrqarxpRHwawo-_pO',logo:'SUGARMAMI',logoUrl:'',sub:'Music Video · 2025'},
 {id:'f15',client:'Sin Modales',director:'Isabel de Fortuny',ytId:'TwQlaDckNk0',driveId:'16mXcwWTG2e_Y0DDo7xyfU3RafVx73Jax',logo:'SIN MODALES',logoUrl:'',sub:'Music Video · 2025'},
 {id:'f16',client:'Product X',director:'Ezra Hurwitz',ytId:'9XBZx4M8H4g',driveId:'1mq0HkzYtQlPXR2pdRi53k3xykrw-e4FQ',customThumb:'/thumb_productx.jpg',logo:'PRODUCT X',logoUrl:'',sub:'Commercial · 2025'},
-{id:'f17',client:'Starbucks',director:'Isabel de Fortuny',ytId:'BQ_NLkr28Sw',driveId:'1V211uNgl3EjjvwZs1oF8qOTp5M39CEFp',logo:'STARBUCKS',logoUrl:'https://logo.clearbit.com/starbucks.com',sub:'Commercial · 2025'}
+{id:'f17',client:'Starbucks',director:'Isabel de Fortuny',ytId:'BQ_NLkr28Sw',driveId:'1V211uNgl3EjjvwZs1oF8qOTp5M39CEFp',logo:'STARBUCKS',logoUrl:'',sub:'Commercial · 2025'}
 ],stillsProjects:[{id:'s1',client:'Nike',title:'Just Do It',desc:'Sport campaign shot in Barcelona.',hero:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200',images:['https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200','https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1200','https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=1200','https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=1200']},{id:'s2',client:'Hummer',title:'Electric Horizon',desc:'EV launch campaign, desert locations.',hero:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',images:['https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200','https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?w=1200','https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1200','https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=1200']},{id:'s3',client:'Minute Maid',title:'Sunshine Stills',desc:'Product editorial, lifestyle & nature.',hero:'https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=1200',images:['https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=1200','https://images.unsplash.com/photo-1603569283847-aa295f0d016a?w=1200','https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=1200','https://images.unsplash.com/photo-1564149504298-00a4d7b3c78b?w=1200']}],galleryProjects:[{id:'p1',name:'MJZ GUMDROP',director:'FMLY Productions',type:'both',scenes:[{number:'01',name:'WINDOW',description:'Artist in a sunlit apartment overlooking the city.',type:'location',photos:[{id:'l2',url:'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800',label:'Luxury Apartment',photoType:'location'},{id:'l3',url:'https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?w=800',label:'Glass Office',photoType:'location'},{id:'l4',url:'https://images.unsplash.com/photo-1505761671935-60b3a7427bad?w=800',label:'City Street',photoType:'location'},{id:'l5',url:'https://images.unsplash.com/photo-1531651138-421dac2bbc54?w=800',label:'Rooftop',photoType:'location'}]},{number:'02',name:'CELEBRITY CRUSH',description:'High-energy concert performance.',type:'both',photos:[{id:'l7',url:'https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?w=800',label:'Concert Hall',photoType:'location'},{id:'c1',url:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800',label:'Male Lead',photoType:'cast'},{id:'c2',url:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800',label:'Female Lead',photoType:'cast'},{id:'c3',url:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800',label:'Supporting Actor',photoType:'cast'}]},{number:'03',name:'MS POPULAR',description:'Elegant mansion interior.',type:'location',photos:[{id:'l8',url:'https://images.unsplash.com/photo-1536437075651-01d675529a8b?w=800',label:'Mansion Interior',photoType:'location'},{id:'l6',url:'https://images.unsplash.com/photo-1568495248636-6432b97bd949?w=800',label:'Beach',photoType:'location'},{id:'l11',url:'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=800',label:'Forest',photoType:'location'},{id:'l12',url:'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800',label:'Lake',photoType:'location'}]}]}],galleryAccounts:[{id:'a1',name:'Sarah Miller',email:'sarah@client.com',password:'sarah123',role:'client',projectId:'p1'}],galleryLikes:[]};
 const photoDB={locations:[{id:'l1',url:'https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?w=600',label:'Industrial Warehouse'},{id:'l2',url:'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600',label:'Luxury Apartment'},{id:'l3',url:'https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?w=600',label:'Glass Office'},{id:'l4',url:'https://images.unsplash.com/photo-1505761671935-60b3a7427bad?w=600',label:'City Street'},{id:'l5',url:'https://images.unsplash.com/photo-1531651138-421dac2bbc54?w=600',label:'Rooftop'},{id:'l6',url:'https://images.unsplash.com/photo-1568495248636-6432b97bd949?w=600',label:'Beach'},{id:'l7',url:'https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?w=600',label:'Concert Hall'},{id:'l8',url:'https://images.unsplash.com/photo-1536437075651-01d675529a8b?w=600',label:'Mansion Interior'},{id:'l9',url:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600',label:'Mountain Road'},{id:'l10',url:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600',label:'Gym Studio'},{id:'l11',url:'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=600',label:'Forest'},{id:'l12',url:'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600',label:'Lake'}],cast:[{id:'c1',url:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600',label:'Male Lead'},{id:'c2',url:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600',label:'Female Lead'},{id:'c3',url:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600',label:'Supporting Actor'},{id:'c4',url:'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600',label:'Villain'},{id:'c5',url:'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600',label:'Young Actor'},{id:'c6',url:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600',label:'Character A'}]};
 let currentUser=null,loginTab='admin',likesFilter='all',activeProjectId='p1',selectedFile=null,parsedScenes=[],sceneSelections={};
@@ -894,6 +894,37 @@ function azRenderScenes(scenes,wantLoc,wantCast){
     c.appendChild(card);
   });
 }
+
+let azFile=null,azBase64=null;
+function azHandleFile(file){
+  if(!file)return;
+  azFile=file;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    azBase64=ev.target.result.split(',')[1];
+    document.getElementById('az-fname').textContent=file.name;
+    document.getElementById('az-fsize').textContent=(file.size/1024/1024).toFixed(2)+' MB';
+    document.getElementById('az-file-chosen').style.display='flex';
+    const btn=document.getElementById('az-btn');
+    btn.disabled=false;btn.style.opacity='1';
+  };
+  reader.readAsDataURL(file);
+}
+function azHandleDrop(e){
+  e.preventDefault();
+  const f=e.dataTransfer.files[0];
+  if(f)azHandleFile(f);
+}
+function azReset(){
+  azFile=null;azBase64=null;
+  document.getElementById('az-file-chosen').style.display='none';
+  document.getElementById('az-file-input').value='';
+  const btn=document.getElementById('az-btn');
+  btn.disabled=true;btn.style.opacity='0.35';
+  document.getElementById('az-status').textContent='';
+  document.getElementById('az-scenes').innerHTML='';
+}
+
 </script>
 </body>
 </html>
