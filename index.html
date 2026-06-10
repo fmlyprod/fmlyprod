@@ -606,8 +606,7 @@ const ap=document.getElementById('about-photo');if(ap)ap.src='/about.jpg';
 
 // VIDEO LIGHTBOX
 function openVLB(ytId,label,vimeoId){const wrap=document.getElementById('vlb-wrap');const src=vimeoId?`https://player.vimeo.com/video/${vimeoId}?autoplay=1&title=0&byline=0&portrait=0`:`https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0`;wrap.innerHTML=`<iframe width="100%" height="100%" src="${src}" frameborder="0" allow="autoplay;encrypted-media;fullscreen" allowfullscreen style="border:none;"></iframe>`;document.getElementById('vlb-label').textContent=label;document.getElementById('vlb').classList.add('show');}
-function closeVLB(){document.getElementById('vlb').classList.remove('show');document.getElementById('vlb-wrap').innerHTML='<video id="vlb-video" controls playsinline></video>';}
-function closeVLB(){const v=document.getElementById('vlb-video');v.pause();v.src='';document.getElementById('vlb').classList.remove('show');}
+function closeVLB(){document.getElementById('vlb').classList.remove('show');document.getElementById('vlb-wrap').innerHTML='';}
 document.getElementById('vlb').addEventListener('click',function(e){if(e.target===this||e.target===document.getElementById('vlb-wrap'))closeVLB();});
 
 function toggleMobileNav(){const list=document.getElementById('main-nav-links');list.classList.toggle('open');const closeBtn=list.querySelector('.nav-close');if(closeBtn)closeBtn.style.display=list.classList.contains('open')?'block':'none';}
@@ -620,7 +619,7 @@ function makeFilmItem(p,idx){
   d.style.borderRight=idx%2===0?'1px solid var(--border)':'none';
   const lH=p.logoUrl?`<img src="${p.logoUrl}" alt="${p.client}" style="max-width:140px;max-height:60px;object-fit:contain;filter:brightness(0) invert(1);opacity:.9;" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><div class="w-splash-logo" style="display:none;">${p.logo||p.client}</div>`:`<div class="w-splash-logo">${p.logo||p.client}</div>`;
   const thumb=p.ytId?`https://img.youtube.com/vi/${p.ytId}/maxresdefault.jpg`:p.vimeoThumb||'';
-  d.innerHTML=`<div class="w-video" style="background:#000;background-image:url('${thumb}');background-size:cover;background-position:center;"></div><div class="w-splash"><div style="display:flex;flex-direction:column;align-items:center;gap:16px;">${lH}<div class="w-splash-sub">${p.sub||'Dir. '+p.director}</div><div class="w-splash-play"><svg width="8" height="12" viewBox="0 0 8 12"><path d="M0 0l8 6-8 6z"/></svg></div></div></div><div class="w-hover"><div class="w-client">${p.client}</div><div class="w-director">Dir. ${p.director}</div><div class="w-cta"><div class="w-play-sm"><svg width="5" height="8" viewBox="0 0 5 8"><path d="M0 0l5 4-5 4z"/></svg></div>Watch</div></div>`;
+  d.innerHTML=`<div class="w-video" style="background:#000;" id="thumb-${p.id}"><img src="${thumb}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.src='https://img.youtube.com/vi/${p.ytId}/hqdefault.jpg'" loading="lazy"></div><div class="w-splash"><div style="display:flex;flex-direction:column;align-items:center;gap:16px;">${lH}<div class="w-splash-sub">${p.sub||'Dir. '+p.director}</div><div class="w-splash-play"><svg width="8" height="12" viewBox="0 0 8 12"><path d="M0 0l8 6-8 6z"/></svg></div></div></div><div class="w-hover"><div class="w-client">${p.client}</div><div class="w-director">Dir. ${p.director}</div><div class="w-cta"><div class="w-play-sm"><svg width="5" height="8" viewBox="0 0 5 8"><path d="M0 0l5 4-5 4z"/></svg></div>Watch</div></div>`;
   d.addEventListener('mouseenter',()=>{const v=d.querySelector('.w-video');if(v)v.play().catch(()=>{});});
   d.addEventListener('mouseleave',()=>{const v=d.querySelector('.w-video');if(v){v.pause();v.currentTime=0;}});
   d.addEventListener('click',()=>openVLB(p.ytId||null,p.client+(p.director?' — Dir. '+p.director:''),p.vimeoId||null));
@@ -693,7 +692,7 @@ const MADRID_FOLDERS=[
   {name:'ART GALLERY MAD',id:'1fiaPEQdCV2eh5lk60g1h-zxZLrf8X7GQ',keywords:['gallery','art','museum','exhibition','creative','studio','modern']},
   {name:'FIREBRIGADE MAD',id:'1PtWrytvNHpDdwDz62H10zBYKgI9JZ7NL',keywords:['fire','brigade','station','industrial','warehouse','garage']},
   {name:'PARKS MAD',id:'15xdD2zLRNX1tN6GnTbebS0VBcS96YCup',keywords:['park','garden','outdoor','nature','green','grass','trees']},
-  {name:'HOTELS MAD',id:'1vKyQakUarvZad18I0Cp0E6NESjwcKQzk',keywords:['hotel','lobby','conference','meeting','office','corporate','reception','ballroom','luxury']},
+  {name:'HOTELS MAD',id:'1vKyQakUarvZad18I0Cp0E6NESjwcKQzk',keywords:['hotel','lobby','conference','meeting','office','corporate','reception','ballroom','luxury','room','presentation','interior','modern']},
   {name:'FACADES MAD',id:'1h-gI8abi7Lnq2CvN3AYhi-c2OvXWMxDx',keywords:['facade','exterior','building','architecture','entrance']},
   {name:'MARQUEE MAD',id:'1Xt1FgyfiE1m6uKfbo75CIqqxc_XdovBh',keywords:['marquee','tent','event','outdoor event','party','wedding']},
   {name:'SUPERMARKET MAD',id:'1uVmqW4rG2q1_WgHRK4xarAzdyRtc_5SQ',keywords:['supermarket','shop','store','retail','market','grocery']},
