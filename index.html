@@ -637,8 +637,8 @@ function makeFilmItem(p,idx){
   d.className='work-item';
   d.style.borderRight=idx%2===0?'1px solid var(--border)':'none';
   const lH=p.logoUrl?`<img src="${p.logoUrl}" alt="${p.client}" style="max-width:140px;max-height:60px;object-fit:contain;filter:brightness(0) invert(1);opacity:.9;" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><div class="w-splash-logo" style="display:none;">${p.logo||p.client}</div>`:`<div class="w-splash-logo">${p.logo||p.client}</div>`;
-  const thumb=`https://drive.google.com/thumbnail?id=${p.driveId}&sz=w1280`;
-  d.innerHTML=`<div class="w-video" style="background:#000;overflow:hidden;"><img src="${thumb}" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" onerror="this.style.display='none'"></div><div class="w-splash"><div style="display:flex;flex-direction:column;align-items:center;gap:16px;">${lH}<div class="w-splash-sub">${p.sub||'Dir. '+p.director}</div><div class="w-splash-play"><svg width="8" height="12" viewBox="0 0 8 12"><path d="M0 0l8 6-8 6z"/></svg></div></div></div><div class="w-hover"><div class="w-client">${p.client}</div><div class="w-director">Dir. ${p.director}</div><div class="w-cta"><div class="w-play-sm"><svg width="5" height="8" viewBox="0 0 5 8"><path d="M0 0l5 4-5 4z"/></svg></div>Watch</div></div>`;
+  const thumb=p.ytId?`https://img.youtube.com/vi/${p.ytId}/maxresdefault.jpg`:(p.vimeoId?`https://vumbnail.com/${p.vimeoId}.jpg`:'');
+  d.innerHTML=`<div class="w-video" style="background:#000;overflow:hidden;"><img src="${thumb}" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${p.ytId}/hqdefault.jpg'"></div><div class="w-splash"><div style="display:flex;flex-direction:column;align-items:center;gap:16px;">${lH}<div class="w-splash-sub">${p.sub||'Dir. '+p.director}</div><div class="w-splash-play"><svg width="8" height="12" viewBox="0 0 8 12"><path d="M0 0l8 6-8 6z"/></svg></div></div></div><div class="w-hover"><div class="w-client">${p.client}</div><div class="w-director">Dir. ${p.director}</div><div class="w-cta"><div class="w-play-sm"><svg width="5" height="8" viewBox="0 0 5 8"><path d="M0 0l5 4-5 4z"/></svg></div>Watch</div></div>`;
   d.addEventListener('mouseenter',()=>{const v=d.querySelector('.w-video');if(v)v.play().catch(()=>{});});
   d.addEventListener('mouseleave',()=>{const v=d.querySelector('.w-video');if(v){v.pause();v.currentTime=0;}});
   d.addEventListener('click',()=>openVLB(p.ytId||null,p.client+(p.director?' — Dir. '+p.director:''),p.vimeoId||null));
@@ -656,7 +656,7 @@ function beLogin(){const pw=document.getElementById('be-pw').value;if(pw==='admi
 function beLogout(){document.getElementById('be-login-screen').style.display='flex';document.getElementById('be-shell').style.display='none';document.getElementById('be-pw').value='';document.getElementById('be-error').classList.remove('show');showPage('home');}
 function showBePane(p,btn){document.querySelectorAll('.be-pane').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.be-tab').forEach(b=>b.classList.remove('active'));document.getElementById('be-pane-'+p).classList.add('active');if(btn)btn.classList.add('active');}
 function addFilmProject(){const client=document.getElementById('f-client').value.trim(),director=document.getElementById('f-director').value.trim(),url=document.getElementById('f-url').value.trim(),logo=document.getElementById('f-logo').value.trim()||client.toUpperCase(),logoUrl=document.getElementById('f-logoUrl').value.trim(),sub=document.getElementById('f-sub').value.trim();if(!client||!url){alert('Client name and video URL are required.');return;}db.filmProjects.push({id:'f'+Date.now(),client,director,url,logo,logoUrl,sub});['f-client','f-director','f-url','f-logo','f-logoUrl','f-sub'].forEach(id=>document.getElementById(id).value='');renderBeFilmTable();const msg=document.getElementById('f-msg');msg.style.display='inline';setTimeout(()=>msg.style.display='none',2000);}
-function renderBeFilmTable(){const tb=document.getElementById('film-table-body');if(!tb)return;tb.innerHTML=db.filmProjects.map((p,i)=>`<tr><td><img src="https://drive.google.com/thumbnail?id=${p.driveId}&sz=w140" style="width:70px;height:44px;object-fit:cover;background:#111;"></td><td style="font-weight:700;">${p.client}</td><td style="color:var(--muted);">${p.director}</td><td>${p.logoUrl?`<img src="${p.logoUrl}" style="height:24px;object-fit:contain;filter:invert(1);opacity:.7;">`:`<span class="be-tag be-tag-film">${p.logo}</span>`}</td><td><div class="move-btns"><button class="move-btn" onclick="moveFilm(${i},-1)">▲</button><button class="move-btn" onclick="moveFilm(${i},1)">▼</button></div></td><td><button class="be-btn be-btn-sm be-btn-red" onclick="deleteFilm('${p.id}')">Remove</button></td></tr>`).join('');}
+function renderBeFilmTable(){const tb=document.getElementById('film-table-body');if(!tb)return;tb.innerHTML=db.filmProjects.map((p,i)=>`<tr><td><img src="${p.ytId?`https://img.youtube.com/vi/${p.ytId}/default.jpg`:``}" style="width:70px;height:44px;object-fit:cover;background:#111;"></td><td style="font-weight:700;">${p.client}</td><td style="color:var(--muted);">${p.director}</td><td>${p.logoUrl?`<img src="${p.logoUrl}" style="height:24px;object-fit:contain;filter:invert(1);opacity:.7;">`:`<span class="be-tag be-tag-film">${p.logo}</span>`}</td><td><div class="move-btns"><button class="move-btn" onclick="moveFilm(${i},-1)">▲</button><button class="move-btn" onclick="moveFilm(${i},1)">▼</button></div></td><td><button class="be-btn be-btn-sm be-btn-red" onclick="deleteFilm('${p.id}')">Remove</button></td></tr>`).join('');}
 function moveFilm(i,dir){const arr=db.filmProjects,j=i+dir;if(j<0||j>=arr.length)return;[arr[i],arr[j]]=[arr[j],arr[i]];renderBeFilmTable();}
 function deleteFilm(id){if(!confirm('Remove?'))return;db.filmProjects=db.filmProjects.filter(p=>p.id!==id);renderBeFilmTable();}
 function addStillsProject(){const client=document.getElementById('s-client').value.trim(),title=document.getElementById('s-title').value.trim(),desc=document.getElementById('s-desc').value.trim(),hero=document.getElementById('s-hero').value.trim(),imgs=document.getElementById('s-imgs').value.split('\n').map(s=>s.trim()).filter(Boolean);if(!client||!hero){alert('Client name and hero image URL required.');return;}db.stillsProjects.push({id:'s'+Date.now(),client,title,desc,hero,images:[hero,...imgs]});['s-client','s-title','s-desc','s-hero','s-imgs'].forEach(id=>document.getElementById(id).value='');renderBeStillsTable();const msg=document.getElementById('s-msg');msg.style.display='inline';setTimeout(()=>msg.style.display='none',2000);}
@@ -831,6 +831,34 @@ Return ONLY a JSON array of folder IDs: ["id1","id2"]. No explanation.`}]);
   } catch(e){ console.warn('searchDriveForPhotos error:', e); return []; }
 }
 
+
+
+let azFile=null,azBase64=null;
+function azHandleFile(file){
+  if(!file)return;
+  azFile=file;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    azBase64=ev.target.result.split(',')[1];
+    document.getElementById('az-fname').textContent=file.name;
+    document.getElementById('az-fsize').textContent=(file.size/1024/1024).toFixed(2)+' MB';
+    document.getElementById('az-file-chosen').style.display='flex';
+    const btn=document.getElementById('az-btn');
+    btn.disabled=false;btn.style.opacity='1';
+  };
+  reader.readAsDataURL(file);
+}
+function azHandleDrop(e){e.preventDefault();const f=e.dataTransfer.files[0];if(f)azHandleFile(f);}
+function azReset(){
+  azFile=null;azBase64=null;
+  document.getElementById('az-file-chosen').style.display='none';
+  document.getElementById('az-file-input').value='';
+  const btn=document.getElementById('az-btn');btn.disabled=true;btn.style.opacity='0.35';
+  document.getElementById('az-status').textContent='';
+  document.getElementById('az-empty').style.display='flex';
+  document.getElementById('az-loading').style.display='none';
+  document.getElementById('az-scenes').style.display='none';
+}
 
 async function azAnalyze(){
   if(!azFile||!azBase64)return;
