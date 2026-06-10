@@ -293,22 +293,17 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
 /* ── MOBILE ── */
 @media(max-width:768px){
   /* NAV */
-  nav#site-nav{padding:12px 20px;height:56px;}
-  .nav-logo img{height:32px!important;width:auto!important;}
-  .nav-links{gap:18px;}
-  .nav-links a{font-size:9px;letter-spacing:.12em;}
+  nav#site-nav{padding:10px 16px;height:auto;flex-wrap:nowrap;align-items:center;}
+  .nav-logo img{height:28px!important;width:auto!important;}
+  .nav-links{gap:14px;flex-wrap:nowrap;}
+  .nav-links a{font-size:8px;letter-spacing:.08em;}
   #nav-backend{display:none!important;}
-  #nav-hamburger{display:flex!important;}
-  #main-nav-links{display:none!important;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;gap:36px;z-index:300;}
-  #main-nav-links.open{display:flex!important;}
-  #main-nav-links a{font-size:14px!important;letter-spacing:.25em;}
-  .nav-close{display:none;}
-  #main-nav-links.open .nav-close{display:block!important;position:absolute;top:24px;right:24px;background:none;border:none;color:var(--text);font-size:24px;cursor:pointer;}
+  #nav-hamburger{display:none!important;}
 
   /* HERO */
   .hero-content{padding-top:56px!important;}
   .hero-content img{height:clamp(50px,18vw,90px)!important;}
-  .hero-tagline{font-size:9px;letter-spacing:.15em;padding:0 20px;}
+  .hero-tagline{font-size:8px;letter-spacing:.1em;padding:0 16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   nav#site-nav{justify-content:space-between;padding:12px 16px;}
   .nav-logo{flex-shrink:0;}
   .nav-links{gap:12px;flex-wrap:nowrap;}
@@ -929,6 +924,19 @@ function azReset(){
   document.getElementById('az-scenes').innerHTML='';
 }
 
+
+function repairJSON(str){
+  const m=str.match(/\[[\s\S]*\]/);
+  if(!m)return null;
+  let s=m[0];
+  s=s.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g,' ');
+  s=s.replace(/,(\s*[}\]])/g,'$1');
+  try{return JSON.parse(s);}catch(e){
+    const lb=s.lastIndexOf('},');
+    if(lb>10){try{return JSON.parse(s.slice(0,lb+1)+']');}catch(e2){}}
+    return null;
+  }
+}
 </script>
 </body>
 </html>
