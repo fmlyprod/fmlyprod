@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>fmly — Upload Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0a;--surface:#111;--border:#222;--accent:#fff;
+  --muted:#666;--dim:#444;--green:#2ecc71;--red:#e74c3c;--blue:#3498db;
+}
+body{background:var(--bg);color:#fff;font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.mono{font-family:'DM Mono',monospace}
+
+/* ── LOGIN ── */
+#login-screen{width:100%;max-width:380px;text-align:center}
+.logo{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.4em;color:var(--muted);text-transform:uppercase;margin-bottom:48px}
+.login-form input{
+  width:100%;background:var(--surface);border:1px solid var(--border);
+  color:#fff;padding:14px 16px;font-family:'DM Mono',monospace;font-size:13px;
+  letter-spacing:.05em;outline:none;display:block;margin-bottom:12px;
+  transition:border-color .2s
+}
+.login-form input:focus{border-color:var(--dim)}
+.login-form button{
+  width:100%;background:#fff;color:#000;border:none;padding:14px;
+  font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.2em;
+  text-transform:uppercase;cursor:pointer;margin-top:4px;transition:opacity .2s
+}
+.login-form button:hover{opacity:.85}
+.login-error{color:var(--red);font-size:12px;margin-top:12px;font-family:'DM Mono',monospace;min-height:18px}
+
+/* ── UPLOAD SCREEN ── */
+#upload-screen{display:none;width:100%;max-width:720px}
+.up-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:40px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.up-title{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+.up-user{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--dim);cursor:pointer}
+.up-user:hover{color:var(--muted)}
+
+.section-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+.field-row.single{grid-template-columns:1fr}
+.field-group{display:flex;flex-direction:column;gap:6px}
+.field-group label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.field-group input{
+  background:var(--surface);border:1px solid var(--border);color:#fff;
+  padding:10px 12px;font-family:'DM Mono',monospace;font-size:12px;
+  letter-spacing:.05em;outline:none;transition:border-color .2s
+}
+.field-group input:focus{border-color:var(--dim)}
+
+/* Drop zone */
+#drop-zone{
+  border:1px dashed var(--border);padding:48px 32px;text-align:center;
+  cursor:pointer;transition:border-color .2s,background .2s;margin-bottom:24px;
+  position:relative
+}
+#drop-zone:hover,#drop-zone.drag-over{border-color:var(--dim);background:rgba(255,255,255,.02)}
+#drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.drop-icon{font-size:28px;margin-bottom:12px;opacity:.3}
+.drop-title{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.drop-sub{font-size:11px;color:var(--dim)}
+
+/* File list */
+#file-list{margin-bottom:24px;max-height:280px;overflow-y:auto}
+.file-item{
+  display:flex;align-items:center;gap:12px;padding:8px 0;
+  border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;font-size:11px
+}
+.file-item:last-child{border-bottom:none}
+.file-name{flex:1;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.file-size{color:var(--dim);min-width:60px;text-align:right}
+.file-status{min-width:60px;text-align:right}
+.file-status.pending{color:var(--dim)}
+.file-status.uploading{color:var(--blue)}
+.file-status.done{color:var(--green)}
+.file-status.error{color:var(--red)}
+
+/* Progress */
+#progress-section{margin-bottom:24px;display:none}
+.progress-label{display:flex;justify-content:space-between;margin-bottom:8px}
+.progress-label span{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+.progress-bar-bg{background:var(--surface);height:3px;width:100%}
+.progress-bar-fill{background:#fff;height:3px;width:0%;transition:width .3s}
+.progress-stats{font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);margin-top:8px}
+
+/* Buttons */
+.btn-row{display:flex;gap:12px}
+#upload-btn{
+  flex:1;background:#fff;color:#000;border:none;padding:14px;
+  font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;cursor:pointer;transition:opacity .2s
+}
+#upload-btn:hover:not(:disabled){opacity:.85}
+#upload-btn:disabled{opacity:.3;cursor:not-allowed}
+#clear-btn{
+  background:transparent;color:var(--muted);border:1px solid var(--border);
+  padding:14px 20px;font-family:'DM Mono',monospace;font-size:11px;
+  letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:border-color .2s
+}
+#clear-btn:hover{border-color:var(--dim)}
+
+.success-msg{
+  text-align:center;padding:32px;background:rgba(46,204,113,.05);
+  border:1px solid rgba(46,204,113,.2);display:none
+}
+.success-msg .check{font-size:32px;margin-bottom:12px}
+.success-msg p{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.1em;color:var(--green)}
+.success-msg small{display:block;margin-top:8px;color:var(--dim);font-size:11px}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="logo">fmly — upload portal</div>
+  <div class="login-form">
+    <input id="login-user" type="text" placeholder="username" autocomplete="off" autocapitalize="none">
+    <input id="login-pass" type="password" placeholder="password">
+    <button onclick="doLogin()">Enter</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- UPLOAD -->
+<div id="upload-screen">
+  <div class="up-header">
+    <div class="up-title">fmly — upload portal</div>
+    <div class="up-user" id="up-user-label" onclick="doLogout()">logout →</div>
+  </div>
+
+  <div class="section-label" style="margin-bottom:16px">Upload destination</div>
+  <div class="field-row">
+    <div class="field-group">
+      <label>Day / Category</label>
+      <input id="cat-input" type="text" placeholder="e.g. DAY 2" autocapitalize="characters">
+    </div>
+    <div class="field-group">
+      <label>Role / Scene</label>
+      <input id="sub-input" type="text" placeholder="e.g. WINDOW HERO" autocapitalize="characters">
+    </div>
+  </div>
+
+  <div class="section-label">Files</div>
+  <div id="drop-zone">
+    <input type="file" id="file-input" multiple accept="image/*,video/*,.jpg,.jpeg,.png,.mp4,.mov,.cr2,.cr3,.arw,.nef,.dng">
+    <div class="drop-icon">↑</div>
+    <div class="drop-title">Drop files here or click to select</div>
+    <div class="drop-sub">Photos &amp; videos — any size</div>
+  </div>
+
+  <div id="file-list"></div>
+
+  <div id="progress-section">
+    <div class="progress-label">
+      <span>Uploading</span>
+      <span id="progress-pct">0%</span>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar"></div></div>
+    <div class="progress-stats" id="progress-stats"></div>
+  </div>
+
+  <div class="success-msg" id="success-msg">
+    <div class="check">✓</div>
+    <p id="success-text">Upload complete</p>
+    <small id="success-sub"></small>
+  </div>
+
+  <div id="manifest-warn" style="display:none;margin-bottom:16px;padding:12px;border:1px solid rgba(231,76,60,.3);background:rgba(231,76,60,.05);font-family:'DM Mono',monospace;font-size:11px;color:#e74c3c;letter-spacing:.05em">⚠ Gallery manifest update failed — files uploaded to storage but won't appear in gallery until the worker's GITHUB_TOKEN secret is set in Cloudflare dashboard.</div>
+  <div class="btn-row">
+    <button id="upload-btn" onclick="startUpload()" disabled>↑ Upload Files</button>
+    <button id="clear-btn" onclick="clearFiles()">Clear</button>
+  </div>
+</div>
+
+<script>
+const WORKER = 'https://fmly-upload.fmlyprod.workers.dev';
+const CDN    = 'https://media.fmlyprod.com';
+
+let session = null;  // { token, prefix, project, label }
+let files   = [];    // Array of File objects
+let isUploading = false;
+
+// ─── Auth ─────────────────────────────────────────────────────────────────
+async function doLogin() {
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value;
+  const err = document.getElementById('login-error');
+  err.textContent = '';
+  if (!u || !p) { err.textContent = 'enter username and password'; return; }
+
+  try {
+    const r = await fetch(WORKER + '/auth', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({username: u, password: p})
+    });
+    const d = await r.json();
+    if (!d.ok) { err.textContent = 'invalid credentials'; return; }
+    session = d;
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('upload-screen').style.display = 'block';
+    document.getElementById('up-user-label').textContent = u + ' — logout →';
+  } catch(e) {
+    err.textContent = 'connection error — try again';
+  }
+}
+
+document.getElementById('login-pass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+document.getElementById('login-user').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('login-pass').focus(); });
+
+function doLogout() {
+  session = null; files = [];
+  document.getElementById('file-list').innerHTML = '';
+  document.getElementById('login-screen').style.display = 'block';
+  document.getElementById('upload-screen').style.display = 'none';
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+}
+
+// ─── File selection ────────────────────────────────────────────────────────
+document.getElementById('file-input').addEventListener('change', function() {
+  addFiles(Array.from(this.files));
+  this.value = '';
+});
+
+const dz = document.getElementById('drop-zone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+dz.addEventListener('drop', async e => {
+  e.preventDefault(); dz.classList.remove('drag-over');
+  const items = Array.from(e.dataTransfer.items || []);
+  if (items.length && items[0].webkitGetAsEntry) {
+    const all = [];
+    async function readEntry(entry) {
+      if (entry.isFile) {
+        return new Promise(res => entry.file(res));
+      } else if (entry.isDirectory) {
+        const reader = entry.createReader();
+        const entries = await new Promise(res => {
+          const out = [];
+          const go = () => reader.readEntries(batch => { if(!batch.length) res(out); else { out.push(...batch); go(); } });
+          go();
+        });
+        return (await Promise.all(entries.map(readEntry))).flat();
+      }
+      return [];
+    }
+    for (const item of items) {
+      const entry = item.webkitGetAsEntry();
+      if (entry) { const got = await readEntry(entry); all.push(...[].concat(got)); }
+    }
+    addFiles(all);
+  } else {
+    addFiles(Array.from(e.dataTransfer.files));
+  }
+});
+
+function addFiles(newFiles) {
+  const media = newFiles.filter(f => /\.(jpe?g|png|mp4|mov|cr[23]|arw|nef|dng|gif|webp|heic)$/i.test(f.name));
+  if (!media.length) return;
+  files = [...files, ...media];
+  renderFileList();
+  document.getElementById('upload-btn').disabled = false;
+  document.getElementById('success-msg').style.display = 'none';
+}
+
+function fmt(bytes) {
+  if (bytes < 1024) return bytes + 'B';
+  if (bytes < 1024*1024) return (bytes/1024).toFixed(0) + 'KB';
+  return (bytes/(1024*1024)).toFixed(1) + 'MB';
+}
+
+function renderFileList() {
+  const list = document.getElementById('file-list');
+  list.innerHTML = files.map((f, i) => `
+    <div class="file-item" id="fi-${i}">
+      <span class="file-name">${f.name}</span>
+      <span class="file-size">${fmt(f.size)}</span>
+      <span class="file-status pending" id="fs-${i}">—</span>
+    </div>`).join('');
+}
+
+function clearFiles() {
+  if (isUploading) return;
+  files = [];
+  document.getElementById('file-list').innerHTML = '';
+  document.getElementById('upload-btn').disabled = true;
+  document.getElementById('progress-section').style.display = 'none';
+  document.getElementById('success-msg').style.display = 'none';
+}
+</script>
+
+<script>
+// ─── Upload ────────────────────────────────────────────────────────────────
+async function startUpload() {
+  if (isUploading || !files.length || !session) return;
+
+  const cat = document.getElementById('cat-input').value.trim().toUpperCase();
+  const sub = document.getElementById('sub-input').value.trim().toUpperCase();
+  if (!cat || !sub) {
+    alert('Please fill in Day/Category and Role/Scene before uploading.');
+    return;
+  }
+
+  isUploading = true;
+  document.getElementById('upload-btn').disabled = true;
+  document.getElementById('clear-btn').disabled = true;
+  document.getElementById('progress-section').style.display = 'block';
+  document.getElementById('success-msg').style.display = 'none';
+
+  const uploadedUrls = [];
+  let done = 0, failed = 0;
+  const total = files.length;
+  const t0 = Date.now();
+  const CONC = 12;
+  const queue = files.map((f, i) => ({ f, i }));
+
+  function tick() {
+    const n = done + failed;
+    const pct = Math.round(n / total * 100);
+    document.getElementById('progress-bar').style.width = pct + '%';
+    document.getElementById('progress-pct').textContent = pct + '%';
+    const elapsed = (Date.now() - t0) / 1000;
+    const rate = n / Math.max(elapsed, 0.1);
+    const remaining = Math.round((total - n) / rate);
+    document.getElementById('progress-stats').textContent =
+      `${n} / ${total} files · ${failed ? failed + ' failed · ' : ''}~${remaining}s remaining`;
+  }
+
+  await Promise.all(Array.from({ length: CONC }, async () => {
+    while (queue.length) {
+      const { f: file, i } = queue.shift();
+      const statusEl = document.getElementById('fs-' + i);
+      statusEl.className = 'file-status uploading';
+      statusEl.textContent = '↑';
+      let ok = false;
+      for (let attempt = 0; attempt < 3 && !ok; attempt++) {
+        if (attempt > 0) {
+          await new Promise(r => setTimeout(r, 1000 * attempt));
+          statusEl.textContent = '↻';
+        }
+        try {
+          const key = `${session.prefix}/${cat}/${sub}/${file.name}`;
+          const pr = await fetch(WORKER + '/presign', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: session.token, key, ct: file.type || 'application/octet-stream' })
+          });
+          const pd = await pr.json();
+          if (!pd.ok) throw new Error('presign failed');
+          const up = await fetch(pd.url, {
+            method: 'PUT',
+            headers: { 'Content-Type': file.type || 'application/octet-stream' },
+            body: file
+          });
+          if (!up.ok) throw new Error('upload failed: ' + up.status);
+          uploadedUrls.push(`${CDN}/${key}`);
+          done++;
+          statusEl.className = 'file-status done';
+          statusEl.textContent = '✓';
+          ok = true;
+        } catch(e) {
+          if (attempt === 2) {
+            failed++;
+            statusEl.className = 'file-status error';
+            statusEl.textContent = '✗';
+          }
+        }
+      }
+      tick();
+    }
+  }));
+
+  // Update manifest
+  if (uploadedUrls.length > 0) {
+    try {
+      await fetch(WORKER + '/manifest', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          token: session.token,
+          category: cat,
+          subfolder: sub,
+          urls: uploadedUrls
+        })
+      });
+    } catch(e) {
+      console.warn('Manifest update failed:', e);
+      document.getElementById('manifest-warn').style.display='block';
+    }
+  }
+
+  isUploading = false;
+  document.getElementById('clear-btn').disabled = false;
+  document.getElementById('progress-section').style.display = 'none';
+
+  const successEl = document.getElementById('success-msg');
+  const successText = document.getElementById('success-text');
+  const successSub = document.getElementById('success-sub');
+  successEl.style.display = 'block';
+  if (failed === 0) {
+    successText.textContent = `${done} files uploaded successfully`;
+    successSub.textContent = `${cat} / ${sub} — gallery updated`;
+  } else {
+    successText.textContent = `${done} uploaded · ${failed} failed`;
+    successSub.textContent = 'Retry failed files or contact support';
+  }
+
+  // Reset for next batch
+  files = [];
+  document.getElementById('file-list').innerHTML = '';
+  document.getElementById('upload-btn').disabled = true;
+}
+</script>
+</body>
+</html>
