@@ -3549,7 +3549,7 @@ function umShowAddForm(){
   f.style.display='block';
   const sel=document.getElementById('um-project');
   sel.innerHTML='<option value="">— Select project —</option>'+
-    galleryClients.map(c=>`<option value="${c.projectId}|${c.projectName}|${c.manifest}">${c.projectName}</option>`).join('');
+    galleryProjects.map(p=>`<option value="${p.id}|${p.name}|${p.manifest}">${p.name}</option>`).join('');
   document.getElementById('um-username').value='';
   document.getElementById('um-password').value='';
   document.getElementById('um-folders-wrap').style.display='none';
