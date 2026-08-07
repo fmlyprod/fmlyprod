@@ -3126,9 +3126,8 @@ function pmRenderLevel(){
 }
 function pmRenderGroups(topNames,topMap,catData){
   pmRenderNav();
-  {const bc=document.getElementById('pm-breadcrumb');if(bc)bc.style.display='none';}
-  const _safeCat=(pmCurrentCat||'').replace(/'/g,"\'");
-  bc.innerHTML=`<span style="font-family:'DM Mono',monospace;color:var(--text);letter-spacing:.1em;">${pmCurrentCat||''}</span><button onclick="pmDeleteCategory()" style="margin-left:auto;background:rgba(180,40,40,.8);border:none;color:#fff;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:5px 14px;border-radius:3px;cursor:pointer;">✕ Delete Category</button>`;
+  const bc=document.getElementById('pm-breadcrumb');
+  if(bc){bc.style.display='flex';bc.innerHTML=`<span style="font-family:'DM Mono',monospace;color:var(--text);letter-spacing:.1em;">${pmCurrentCat||''}</span><button onclick="pmDeleteCategory()" style="margin-left:auto;background:rgba(180,40,40,.8);border:none;color:#fff;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:5px 14px;border-radius:3px;cursor:pointer;">✕ Delete Category</button>`;}
   document.getElementById('pm-action-bar').style.display='none';
   pmSelected.clear();
   const el=document.getElementById('pm-content');
@@ -3354,6 +3353,7 @@ async function pmRunFolderUpload(files){
 
 function pmRenderFolders(folders){
   document.getElementById('pm-action-bar').style.display='none';
+  const _bcf=document.getElementById('pm-breadcrumb');if(_bcf)_bcf.style.display='none';
   pmSelected.clear();
   const el=document.getElementById('pm-content');
   el.style.gridTemplateColumns='repeat(auto-fill,minmax(200px,1fr))';
