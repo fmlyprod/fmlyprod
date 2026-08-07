@@ -1,1 +1,21 @@
-{"clients": [], "projects": [{"id": "dunkin", "name": "DUNKIN", "manifest": "images/dunkin/manifest.json", "createdAt": "2026-08-05T16:17:07.253Z"}], "gt": "SEdfcBxBQWsWZR12amkdXRp6GXZnZBpiQ3dbXEpqTXt8GhtOSRZ+Qw==", "up": "SUJDVm5LQh5BDg=="}
+{
+  "clients": [
+    {
+      "username": "test",
+      "password": "test",
+      "projectId": "dunkin",
+      "projectName": "DUNKIN",
+      "manifest": "images/dunkin/manifest.json"
+    }
+  ],
+  "projects": [
+    {
+      "id": "dunkin",
+      "name": "DUNKIN",
+      "manifest": "images/dunkin/manifest.json",
+      "createdAt": "2026-08-05T16:17:07.253Z"
+    }
+  ],
+  "gt": "SEdfcBxBQWsWZR12amkdXRp6GXZnZBpiQ3dbXEpqTXt8GhtOSRZ+Qw==",
+  "up": "SUJDVm5LQh5BDg=="
+}
