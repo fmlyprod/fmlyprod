@@ -735,6 +735,7 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
           <button id="pm-del-btn" class="gbtn gbtn-sm" onclick="pmDeleteSelected()" style="background:rgba(180,40,40,.15);border-color:#b42828;color:#e08080;" disabled>Delete Selected</button>
           <label class="gbtn gbtn-sm" style="cursor:pointer;margin-left:auto;" title="Add more photos to this folder"><input type="file" style="display:none;" multiple accept="image/*,video/mp4,video/quicktime,.mov" onchange="handlePmFolderFileInput(this)">↑ Add Photos</label><button id="pm-del-folder-btn" class="gbtn gbtn-sm" onclick="pmDeleteCurrentFolder()" style="background:rgba(180,40,40,.2);border-color:#b42828;color:#e08080;">✕ Delete This Folder</button>
         </div>
+        <div id="pm-breadcrumb" style="display:none;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:12px;align-items:center;gap:6px;cursor:pointer;"></div>
         <div id="pm-content" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;align-items:start;"></div>
         <!-- Upload strip: shown when inside a folder (add more) or at folder grid (new folder) -->
         <div id="pm-folder-upload" style="display:none;margin-top:20px;border-top:1px solid var(--border);padding-top:16px;">
@@ -854,6 +855,7 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
   <div id="g-client-gallery" style="display:none;"><div class="client-gallery"><div class="gallery-header"><div class="gallery-project-tag" id="g-tag"></div><div class="gallery-title" id="g-title"></div></div><div class="gallery-nav" id="g-nav"></div><div class="gallery-actions"><button class="gal-btn">↓ Download All</button><button class="gal-btn" onclick="showMyLikes()">♥ My Selections (<span id="g-like-count">0</span>)</button></div><div class="gallery-body" id="g-body"></div></div></div>
   <div id="g-bakery-gallery" style="display:none;">
     <div class="bak-picdrop-nav" id="bak-picdrop-nav"></div>
+    <div id="bak-breadcrumb" class="bak-breadcrumb" style="display:none;padding:16px 48px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);align-items:center;gap:6px;cursor:pointer;"></div>
     <div id="bak-folder-grid" class="bak-folder-grid"></div>
     <div id="bak-photo-grid" class="bak-photo-grid" style="display:none;"></div>
   </div>
