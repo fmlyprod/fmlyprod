@@ -1420,7 +1420,7 @@ function bakRenderNav(){
       const topNames=Object.keys(topMap).sort((a,b)=>a.localeCompare(b));
       const currentTop=bakCurrentFolder.indexOf('/')>=0?bakCurrentFolder.slice(0,bakCurrentFolder.indexOf('/')):bakCurrentFolder;
       const folderItems=topNames.map(fn=>({label:fn.replace(/_/g,' '),action:`bakSelectFolder('${fn.replace(/'/g,"\'")}')`,active:fn===currentTop}));
-      const dispLabel=(bakCurrentFolder.split('/').pop()||bakCurrentFolder).replace(/_/g,' ');
+      const _dSeg=bakCurrentFolder.split('/').pop()||bakCurrentFolder;const dispLabel=_dSeg==='_root'?'Photos':_dSeg.replace(/_/g,' ');
       segs.push({label:dispLabel,action:null,dropdown:folderItems,active:true});
     }
   }
@@ -3038,7 +3038,7 @@ function pmRenderNav(){
       const prefix=pmCurrentGroup?pmCurrentGroup+'/':'';
       const sibKeys=Object.keys(catData).filter(k=>pmCurrentGroup?k.startsWith(prefix):true).sort((a,b)=>a.localeCompare(b));
       const folderItems=sibKeys.map(fn=>({label:fn.replace(/_/g,' '),action:`pmSelectFolder('${fn.replace(/'/g,"\\'")}')`,active:fn===pmCurrentFolder}));
-      const folderLabel=(pmCurrentFolder.split('/').pop()||pmCurrentFolder).replace(/_/g,' ');
+      const _dispSeg=pmCurrentFolder.split('/').pop()||pmCurrentFolder;const folderLabel=_dispSeg==='_root'?'Photos':_dispSeg.replace(/_/g,' ');
       segs.push({label:folderLabel,action:null,dropdown:folderItems,active:true});
     }
   }
@@ -3366,6 +3366,7 @@ async function pmRunFolderUpload(files){
   }
 }
 
+function pmFolderLabel(fn){return fn==='_root'?'Photos':fn.replace(/_/g,' ');}
 function pmRenderFolders(folders){
   document.getElementById('pm-action-bar').style.display='none';
   const _bcf=document.getElementById('pm-breadcrumb');if(_bcf)_bcf.style.display='none';
@@ -3402,7 +3403,7 @@ function pmSelectFolder(fn){
   const strip=document.getElementById('pm-folder-upload');
   if(strip){
     strip.style.display='block';
-    document.getElementById('pm-folder-upload-label').textContent='Add More to '+fn.replace(/_/g,' ');
+    document.getElementById('pm-folder-upload-label').textContent='Add More to '+pmFolderLabel(fn);
     document.getElementById('pm-folder-dz-label').textContent='Drop photos/videos to add to this folder';
     document.getElementById('pm-new-folder-row').style.display='none';
     document.getElementById('pm-folder-prog').style.display='none';
