@@ -430,6 +430,22 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
   .lcontrols__hint{display:none;}
   .lhero__eyebrow{font-size:8px;letter-spacing:.2em;}
 }
+/* ===== PHOTO MANAGER NAV ===== */
+#pm-picdrop-nav{display:flex;align-items:center;padding:0 0 0 0;border-bottom:1px solid var(--border);min-height:42px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;flex-wrap:wrap;gap:0;position:relative;margin-bottom:16px;}
+.pm-nav-seg{display:flex;align-items:center;gap:3px;position:relative;flex-shrink:0;}
+.pm-nav-label{color:var(--muted);cursor:pointer;transition:color .15s;padding:12px 0;}
+.pm-nav-label:hover{color:var(--text);}
+.pm-nav-seg--active .pm-nav-label{color:var(--text);}
+.pm-nav-drop-btn{color:var(--muted);cursor:pointer;font-size:7px;line-height:1;padding:12px 4px;transition:color .15s;}
+.pm-nav-drop-btn:hover{color:var(--text);}
+.pm-nav-sep{color:var(--border);margin:0 10px;user-select:none;}
+.pm-nav-dropdown{display:none;position:absolute;top:calc(100% + 2px);left:0;min-width:220px;background:var(--surface);border:1px solid var(--border);border-radius:4px;z-index:300;box-shadow:0 4px 24px rgba(0,0,0,.5);max-height:320px;overflow-y:auto;}
+.pm-nav-dropdown.open{display:block;}
+.pm-nav-dd-item{padding:10px 16px;font-size:9px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;color:var(--muted);font-family:'DM Mono',monospace;transition:background .1s,color .1s;border-bottom:1px solid rgba(255,255,255,.04);}
+.pm-nav-dd-item:last-child{border-bottom:none;}
+.pm-nav-dd-item:hover{background:rgba(255,255,255,.05);color:var(--text);}
+.pm-nav-dd-item--active{color:var(--text);}
+.pm-nav-actions{margin-left:auto;display:flex;gap:4px;padding-left:16px;}
 /* ===== BAKERY CLIENT GALLERY ===== */
 #g-bakery-gallery{min-height:100vh;background:var(--bg);padding-top:64px;}
 .bak-picdrop-nav{display:flex;align-items:center;padding:0 48px;border-bottom:1px solid var(--border);min-height:48px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;flex-wrap:wrap;gap:0;position:relative;}
@@ -649,7 +665,7 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
 <div class="page" id="page-gallery">
   <div id="g-login-screen"><div class="gallery-login"><div class="login-box"><div class="login-logo-fmly">FMLY</div><div class="login-logo-sub">References Portal</div><div class="login-title">Sign In</div><div class="login-sub">Access your project gallery</div><div class="login-tabs"><div class="login-tab active" onclick="setLoginTab('admin')">Admin</div><div class="login-tab" onclick="setLoginTab('client')">Client</div></div><div class="g-field" id="login-project-field" style="display:none;"><label>Project</label><select id="login-project-select"></select></div><div class="g-field" id="login-email-field"><label id="login-email-label">Email</label><input type="email" id="login-email" placeholder="you@fmlyprod.com" onkeydown="if(event.key==='Enter')doLogin()"></div><div class="g-field"><label>Password</label><input type="password" id="login-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div><div class="login-error" id="login-error"></div><button class="login-btn" onclick="doLogin()">Sign In</button><div class="login-hint">Admin: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5637323b3f3816303b3a2f7835393b">[email&#160;protected]</a> / admin123<br>Client: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f7849685969fb7949b9e929983d994989a">[email&#160;protected]</a> / sarah123</div></div></div></div>
   <div id="g-admin-shell" style="display:none;">
-    <div class="admin-topbar"><div class="shell-logo" style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.22em;color:var(--text);">FMLY — References Admin</div><div class="admin-tabs"><button class="admin-tab active" onclick="showAdminPane('gallery',this)">Project</button><button class="admin-tab" onclick="showAdminPane('photos',this)">Photos</button><button class="admin-tab" onclick="showAdminPane('users',this)">Users</button><button class="admin-tab" onclick="showAdminPane('likes',this)">Likes Log</button></div><button class="admin-logout" onclick="galleryLogout()">Sign Out</button></div>
+    <div class="admin-topbar"><div class="shell-logo" style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.22em;color:var(--text);">FMLY — References Admin</div><div class="admin-tabs"><button class="admin-tab active" onclick="showAdminPane('gallery',this)">Projects</button><button class="admin-tab" onclick="showAdminPane('photos',this)">Files &amp; Folders</button><button class="admin-tab" onclick="showAdminPane('users',this)">User Management</button><button class="admin-tab" onclick="showAdminPane('likes',this)">Likes Log</button></div><button class="admin-logout" onclick="galleryLogout()">Sign Out</button></div>
     <div class="admin-shell-bg"><div class="admin-content">
       <div class="admin-pane active" id="pane-gallery">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
@@ -723,7 +739,7 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
       </div>
       <div class="admin-pane" id="pane-photos">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
-          <div class="pane-title" style="margin-bottom:0;">Photo Manager</div>
+          <div class="pane-title" style="margin-bottom:0;">Files &amp; Folders</div>
           <select id="pm-project-sel" onchange="pmOnProjectChange(this)" style="background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:10px;padding:6px 10px;border-radius:3px;cursor:pointer;">
             <option value="">— Select project —</option>
           </select>
@@ -758,7 +774,7 @@ footer{padding:48px 48px 40px;display:flex;align-items:flex-end;justify-content:
       </div>
       <div class="admin-pane" id="pane-users">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
-          <div class="pane-title" style="margin-bottom:0;">Users</div>
+          <div class="pane-title" style="margin-bottom:0;">User Management</div>
           <button class="gbtn gbtn-sm" onclick="umToggleAddForm()">+ Add User</button>
         </div>
         <div id="um-table-wrap"></div>
@@ -2004,7 +2020,7 @@ let _workerAuthError=null;
 async function getWorkerToken(){
   if(_workerToken&&Date.now()<_workerTokenExp)return _workerToken;
   if(_workerAuthError)throw _workerAuthError; // don't retry known-bad auth
-  if(!_adminUploadPass){const e=new Error('Upload password missing — reload the page and try again');_workerAuthError=e;throw e;}
+  if(!_adminUploadPass){throw new Error('Upload password missing — reload the page and try again');}
   let d;
   try{
     const r=await fetch(WORKER_URL+'/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:'admin',password:_adminUploadPass})});
@@ -3002,7 +3018,7 @@ function pmRenderNav(){
   if(!el||!pmManifest)return;
   const cats=Object.keys(pmManifest).sort((a,b)=>a.localeCompare(b));
   const sel=document.getElementById('pm-project-sel');
-  const projName=(sel&&sel.selectedIndex>0)?sel.options[sel.selectedIndex].text:'Photo Manager';
+  const projName=(sel&&sel.selectedIndex>0)?sel.options[sel.selectedIndex].text:'Files & Folders';
   const segs=[];
   segs.push({label:projName,action:'pmNavGoRoot()',dropdown:null,active:false});
   if(pmCurrentCat){
@@ -3118,8 +3134,7 @@ function pmRenderLevel(){
   // If all keys are already flat (no subgroups), show them directly
   const hasGroups=topNames.some(t=>topMap[t].length>1||(topMap[t][0]!==t));
   if(!hasGroups||allKeys.length===1){
-    if(allKeys.length===1){pmSelectFolder(allKeys[0]);}
-    else{pmRenderFolders(allKeys);}
+    pmRenderFolders(allKeys);
   }else{
     pmRenderGroups(topNames,topMap,catData);
   }
