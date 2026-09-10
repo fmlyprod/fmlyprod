@@ -1,13 +1,5 @@
 {
-  "clients": [
-    {
-      "username": "test",
-      "password": "test",
-      "projectId": "dunkin",
-      "projectName": "DUNKIN",
-      "manifest": "images/dunkin/manifest.json"
-    }
-  ],
+  "clients": [],
   "projects": [
     {
       "id": "dunkin",
