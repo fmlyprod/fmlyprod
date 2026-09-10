@@ -7,6 +7,14 @@
       "projectId": "msngpcs-orgovyx",
       "projectName": "MSNGPCS_ORGOVYX",
       "manifest": "images/msngpcs-orgovyx/manifest.json"
+    },
+    {
+      "username": "mssngpeces",
+      "password": "family",
+      "role": "client",
+      "projectId": "msngpcs-orgovyx",
+      "projectName": "MSNGPCS_ORGOVYX",
+      "manifest": "images/msngpcs-orgovyx/manifest.json"
     }
   ],
   "projects": [
