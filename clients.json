@@ -1,5 +1,14 @@
 {
-  "clients": [],
+  "clients": [
+    {
+      "username": "MDEFG",
+      "password": "Isabel_7498",
+      "role": "uploader",
+      "projectId": "msngpcs-orgovyx",
+      "projectName": "MSNGPCS_ORGOVYX",
+      "manifest": "images/msngpcs-orgovyx/manifest.json"
+    }
+  ],
   "projects": [
     {
       "id": "dunkin",
