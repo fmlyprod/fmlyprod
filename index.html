@@ -3133,6 +3133,17 @@ function pmRenderLevel(){
   const topNames=Object.keys(topMap).sort((a,b)=>a.localeCompare(b));
   // If all keys are already flat (no subgroups), show them directly
   const hasGroups=topNames.some(t=>topMap[t].length>1||(topMap[t][0]!==t));
+  if(allKeys.length===1&&allKeys[0]==='_root'){
+    // No subfolders — show photos directly without a folder grid
+    pmCurrentFolder='_root';pmSelected.clear();pmUpdateSelBar();
+    pmRenderNav();
+    document.getElementById('pm-action-bar').style.display='flex';
+    document.getElementById('pm-del-folder-btn').style.display='none';
+    pmRenderPhotos();
+    const strip=document.getElementById('pm-folder-upload');
+    if(strip){strip.style.display='block';document.getElementById('pm-folder-upload-label').textContent='Add More Photos';document.getElementById('pm-folder-dz-label').textContent='Drop photos/videos to add';document.getElementById('pm-new-folder-row').style.display='none';document.getElementById('pm-folder-prog').style.display='none';document.getElementById('pm-folder-done').style.display='none';document.getElementById('pm-folder-bar').style.width='0%';}
+    return;
+  }
   if(!hasGroups||allKeys.length===1){
     pmRenderFolders(allKeys);
   }else{
