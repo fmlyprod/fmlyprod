@@ -68,7 +68,9 @@
       "https://media.fmlyprod.com/images/msngpcs-orgovyx/MSNPCS_ORGOVIX/HARDWARE STORE/12 MARC3.jpg"
     ],
     "likedFolders": [],
-    "notes": {},
+    "notes": {
+      "https://media.fmlyprod.com/images/msngpcs-orgovyx/MSNPCS_ORGOVIX/HARDWARE STORE/12 MARC3.jpg": "Love this"
+    },
     "geo": {
       "country": "ES",
       "countryName": "Spain",
@@ -79,7 +81,7 @@
       "ip": "90.160.96.3",
       "org": "Orange Espagne SA"
     },
-    "timeSpent": 6,
-    "ts": 1789160684709
+    "timeSpent": 12,
+    "ts": 1789160691075
   }
 ]
