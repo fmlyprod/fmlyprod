@@ -23,6 +23,14 @@
       "projectId": "a44-reta",
       "projectName": "A44_RETA",
       "manifest": "images/a44-reta/manifest.json"
+    },
+    {
+      "username": "MDEFG",
+      "password": "123",
+      "role": "uploader",
+      "projectId": "a44-reta",
+      "projectName": "A44_RETA",
+      "manifest": "images/a44-reta/manifest.json"
     }
   ],
   "projects": [
