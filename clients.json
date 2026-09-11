@@ -65,6 +65,12 @@
       "name": "PARK - POVO",
       "manifest": "images/park-povo/manifest.json",
       "createdAt": "2026-09-11T20:27:13.772Z"
+    },
+    {
+      "id": "test",
+      "name": "TEST",
+      "manifest": "images/test/manifest.json",
+      "createdAt": "2026-09-11T21:22:36.134Z"
     }
   ],
   "gt": "SEdfcBxBQWsWZR12amkdXRp6GXZnZBpiQ3dbXEpqTXt8GhtOSRZ+Qw==",
