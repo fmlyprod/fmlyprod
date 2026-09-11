@@ -29,6 +29,12 @@
       "name": "MSNGPCS_ORGOVYX",
       "manifest": "images/msngpcs-orgovyx/manifest.json",
       "createdAt": "2026-09-10T09:27:59.311Z"
+    },
+    {
+      "id": "a44-reta",
+      "name": "A44_RETA",
+      "manifest": "images/a44-reta/manifest.json",
+      "createdAt": "2026-09-11T18:22:40.720Z"
     }
   ],
   "gt": "SEdfcBxBQWsWZR12amkdXRp6GXZnZBpiQ3dbXEpqTXt8GhtOSRZ+Qw==",
