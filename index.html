@@ -2327,15 +2327,15 @@ async function handleGalleryDrop(e){
   document.getElementById('gallery-drop-zone').style.borderColor='';
   if(_activeProjectId===null)return;
   const files=await readDropItems(e.dataTransfer);
-  const imgs=files.filter(f=>/\.(jpg|jpeg|png|webp|mp4|mov)$/i.test(f.name));
-  if(!imgs.length){alert('No files found.');return;}
+  const imgs=files.filter(f=>(/\.(jpg|jpeg|png|webp|mp4|mov|heic|heif|gif|tiff|bmp|avif)$/i.test(f.name)||(f.type&&(f.type.startsWith("image/")||f.type.startsWith("video/")))));
+  if(!imgs.length){alert('No supported files found.\n\nAccepted: JPG, PNG, WEBP, HEIC, MP4, MOV and most other image/video formats.');return;}
   const catOv=(document.getElementById('gallery-upload-cat')||{value:''}).value.trim().toUpperCase()||null;
   runUpload(imgs,_activeProjectId,'gallery-upload-bar','gallery-upload-status','gallery-upload-count','gallery-upload-progress','gallery-upload-done',catOv);
 }
 
 function handleGalleryFileInput(input){
   if(_activeProjectId===null)return;
-  const imgs=[...input.files].filter(f=>/\.(jpg|jpeg|png|webp|mp4|mov)$/i.test(f.name));
+  const imgs=[...input.files].filter(f=>(/\.(jpg|jpeg|png|webp|mp4|mov|heic|heif|gif|tiff|bmp|avif)$/i.test(f.name)||(f.type&&(f.type.startsWith("image/")||f.type.startsWith("video/")))));
   const catOv=(document.getElementById('gallery-upload-cat')||{value:''}).value.trim().toUpperCase()||null;
   runUpload(imgs,_activeProjectId,'gallery-upload-bar','gallery-upload-status','gallery-upload-count','gallery-upload-progress','gallery-upload-done',catOv);
 }
@@ -2346,7 +2346,7 @@ async function handleGcDrop(e){
   e.preventDefault();
   document.getElementById('gc-drop-zone').style.borderColor='';
   const files=await readDropItems(e.dataTransfer);
-  gcSetFiles(files.filter(f=>/\.(jpg|jpeg|png|webp|mp4|mov)$/i.test(f.name)));
+  gcSetFiles(files.filter(f=>(/\.(jpg|jpeg|png|webp|mp4|mov|heic|heif|gif|tiff|bmp|avif)$/i.test(f.name)||(f.type&&(f.type.startsWith("image/")||f.type.startsWith("video/"))))));
 }
 function gcSetFiles(files){
   gcFilesPending=files;
@@ -3248,12 +3248,12 @@ async function handlePmFolderDrop(e){
   e.preventDefault();
   document.getElementById('pm-folder-dz').style.borderColor='';
   const files=await readDropItems(e.dataTransfer);
-  const valid=files.filter(f=>!f.name.startsWith('.')&&/\.(jpg|jpeg|png|webp|mp4|mov)$/i.test(f.name));
+  const valid=files.filter(f=>!f.name.startsWith('.')&&(/\.(jpg|jpeg|png|webp|mp4|mov|heic|heif|gif|tiff|bmp|avif)$/i.test(f.name)||(f.type&&(f.type.startsWith("image/")||f.type.startsWith("video/")))));
   if(!valid.length){alert('No valid files found.');return;}
   await pmRunFolderUpload(valid);
 }
 function handlePmFolderFileInput(inp){
-  const valid=[...inp.files].filter(f=>!f.name.startsWith('.')&&/\.(jpg|jpeg|png|webp|mp4|mov)$/i.test(f.name));
+  const valid=[...inp.files].filter(f=>!f.name.startsWith('.')&&(/\.(jpg|jpeg|png|webp|mp4|mov|heic|heif|gif|tiff|bmp|avif)$/i.test(f.name)||(f.type&&(f.type.startsWith("image/")||f.type.startsWith("video/")))));
   inp.value='';
   if(!valid.length)return;
   pmRunFolderUpload(valid);
