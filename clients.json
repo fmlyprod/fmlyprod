@@ -15,6 +15,14 @@
       "projectId": "msngpcs-orgovyx",
       "projectName": "MSNGPCS_ORGOVYX",
       "manifest": "images/msngpcs-orgovyx/manifest.json"
+    },
+    {
+      "username": "Liz",
+      "password": "A44",
+      "role": "client",
+      "projectId": "a44-reta",
+      "projectName": "A44_RETA",
+      "manifest": "images/a44-reta/manifest.json"
     }
   ],
   "projects": [
