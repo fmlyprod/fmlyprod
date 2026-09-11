@@ -31,6 +31,14 @@
       "projectId": "a44-reta",
       "projectName": "A44_RETA",
       "manifest": "images/a44-reta/manifest.json"
+    },
+    {
+      "username": "park",
+      "password": "family",
+      "role": "client",
+      "projectId": "park-povo",
+      "projectName": "PARK - POVO",
+      "manifest": "images/park-povo/manifest.json"
     }
   ],
   "projects": [
